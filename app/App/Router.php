@@ -1,6 +1,6 @@
 <?php
 
-namespace ProgrammerZamanNow\Belajar\PHP\MVC\App;
+namespace SistemPendukungKeputusan\UINIB\PHP\MVC\App;
 
 class Router
 {

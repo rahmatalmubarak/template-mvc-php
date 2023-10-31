@@ -1,6 +1,6 @@
 <?php
 
-namespace ProgrammerZamanNow\Belajar\PHP\MVC\Middleware;
+namespace SistemPendukungKeputusan\UINIB\PHP\MVC\Middleware;
 
 class AuthMiddleware implements Middleware
 {
@@ -9,7 +9,7 @@ class AuthMiddleware implements Middleware
     {
         session_start();
         if (!isset($_SESSION['user'])) {
-            header('Location: /login');
+            header('Location: ' . BASE_URL . '/login');
             exit();
         }
     }

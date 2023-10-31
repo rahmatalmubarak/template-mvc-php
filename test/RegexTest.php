@@ -1,6 +1,6 @@
 <?php
 
-namespace ProgrammerZamanNow\Belajar\PHP\MVC;
+namespace SistemPendukungKeputusan\UINIB\PHP\MVC;
 
 use PHPUnit\Framework\TestCase;
 

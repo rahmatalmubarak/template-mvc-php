@@ -1,6 +1,6 @@
 <?php
 
-namespace ProgrammerZamanNow\Belajar\PHP\MVC\Middleware;
+namespace SistemPendukungKeputusan\UINIB\PHP\MVC\Middleware;
 
 interface Middleware
 {

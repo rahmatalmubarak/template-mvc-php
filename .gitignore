@@ -1,7 +1,2 @@
 vendor
 .idea
-public/css/*
-public/img/*
-public/js/*
-public/plugins/*
-app/View/Dashboard/*
