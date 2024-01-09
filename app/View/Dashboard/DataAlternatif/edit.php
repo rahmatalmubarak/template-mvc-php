@@ -36,10 +36,21 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12">
-                                        <input type="text" name="id_alternatif" id="id_alternatif" value=" <?= $response['data']['Id_Alternatif']; ?>" hidden>
+                                        <input type="text" name="id_alternatif" id="id_alternatif" value=" <?= $response['data']['alternatif']['Id_Alternatif']; ?>" hidden>
                                         <div class="form-group">
                                             <label for="nama">Alternatif</label>
-                                            <input type="text" name="nama" class="form-control" id="nama" placeholder="Alternatif" value="<?= $response['data']['Nama']; ?>" required>
+                                            <input type="text" name="nama" class="form-control" id="nama" placeholder="Alternatif" value="<?= $response['data']['alternatif']['Nama']; ?>" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="minat_bakat">Klasifikasi Minat dan Bakat</label>
+                                            <select class="form-control" name="minat_bakat" id="minat_bakat" required>
+                                                <option value="">Pilih</option>
+                                                <?php
+                                                foreach ($response['data']['minat_bakat'] as $key => $minat_bakat) :
+                                                ?>
+                                                    <option value="<?= $minat_bakat['Id_Sub_Kriteria'] ?>" <?= isset($response['data']['klasifikasi_minat_bakat']['Id_Sub_Kriteria']) && $response['data']['klasifikasi_minat_bakat']['Id_Sub_Kriteria'] ==  $minat_bakat['Id_Sub_Kriteria'] ? 'selected' : $minat_bakat['Id_Sub_Kriteria'] ?>><?= $minat_bakat['Nama'] ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>

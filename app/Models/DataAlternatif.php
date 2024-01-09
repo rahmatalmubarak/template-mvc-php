@@ -6,10 +6,12 @@ use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\Database;
 
 class DataAlternatif{
     private $db;
+    private $dataKlasifikasiMinatBakat;
 
     public function __construct()
     {
         $this->db = new Database;
+        $this->dataKlasifikasiMinatBakat = new DataKlasifikasiMinatBakat;
     }
     public function count_page()
     {
@@ -44,7 +46,11 @@ class DataAlternatif{
         $this->db->query($query);
         $this->db->bind('nama', $data['nama']);
         $this->db->execute();
-        return $this->db->rowCount();
+        $this->db->rowCount();
+
+        $alternatif = $this->getWithParams('Nama', $data['nama']);
+        $this->dataKlasifikasiMinatBakat->add($data, $alternatif['Id_Alternatif']);
+        return true;
     }
 
     public function edit($data){
@@ -53,7 +59,14 @@ class DataAlternatif{
         $this->db->bind('id_alternatif', $data['id_alternatif']);
         $this->db->bind('nama', $data['nama']);
         $this->db->execute();
-        return $this->db->rowCount();
+
+        $isKlasifikasi_minat_bakat = $this->dataKlasifikasiMinatBakat->getWithParams('Id_Alternatif', $data['id_alternatif']);
+        if($isKlasifikasi_minat_bakat){
+            $this->dataKlasifikasiMinatBakat->edit($data);
+        }else{
+            $this->dataKlasifikasiMinatBakat->add($data, $data['id_alternatif']);
+        }
+        return true;
     }
 
     public function getWithParams($field, $data)

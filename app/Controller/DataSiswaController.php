@@ -4,6 +4,7 @@ namespace SistemPendukungKeputusan\UINIB\PHP\MVC\Controller;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\App\View;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Helpers\Helper;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataAlternatif;
+use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataKlasifikasiMinatBakat;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataKriteria;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataPerhitungan;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataSiswa;
@@ -18,6 +19,7 @@ class DataSiswaController {
     private $dataSubKriteria;
     private $dataPerhitungan;
     private $dataAlternatif;
+    private $dataKlasifikasiMinatBakat;
 
     public function __construct() {
         $this->dataSiswa = new DataSiswa;
@@ -27,6 +29,7 @@ class DataSiswaController {
         $this->helper = new Helper;
         $this->dataPerhitungan = new DataPerhitungan;
         $this->dataAlternatif = new DataAlternatif;
+        $this->dataKlasifikasiMinatBakat = new DataKlasifikasiMinatBakat;
     }
 
     public function index(){
@@ -115,7 +118,7 @@ class DataSiswaController {
             header('Location: ' . BASE_URL . 'dashboard/profil/data-siswa');
             exit();
         }
-        // var_dump($_POST);exit();
+        
         $result = $this->dataSiswa->edit($_POST, $_SESSION['user']['Id_User']);
 
         $this->helper->ResponseSession($result, "Hasil Nilai Akhir", false);
@@ -162,6 +165,26 @@ class DataSiswaController {
                 if (count($rekomendasi_prodi) == 3) {
                     break;
                 }
+            }
+        }
+        
+        $id_sub_kriteria_minat_bakat = $this->dataSubKriteria->getWithParams('Nama', $data_user['dataSiswa']['Minat_Bakat']);
+        $prodi_klasifikasi_minat_bakat = $this->dataKlasifikasiMinatBakat->getWithParamsAll('Id_Sub_Kriteria', $id_sub_kriteria_minat_bakat['Id_Sub_Kriteria']);
+        $isSame = true;
+        if(count($prodi_klasifikasi_minat_bakat) > 0){
+            foreach ($prodi_klasifikasi_minat_bakat as $key => $prodi) {
+                foreach ($rekomendasi_prodi as $key => $_prodi) {
+                    if($_prodi['Nama'] == $prodi['Nama']){
+                        unset($prodi['Id_Klasifikasi_Minat_Bakat']);
+                        unset($prodi['Id_Sub_Kriteria']);
+                        unset($prodi['Bobot']);
+                        $isSame = false;
+                    }
+                }
+                if($isSame){
+                    array_push($rekomendasi_prodi, $prodi);
+                }
+                $isSame = true;
             }
         }
         $result = [
