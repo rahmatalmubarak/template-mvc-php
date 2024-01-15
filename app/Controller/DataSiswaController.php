@@ -162,7 +162,7 @@ class DataSiswaController {
         foreach ($data_perhitungan as $key => $perhitungan) {
             if ($perhitungan['Nilai'] <= $nilai_akhir) {
                 // Rekomendasi prodi berdasarkan perhitungan
-                // array_push($rekomendasi_prodi, $perhitungan); 
+                array_push($rekomendasi_prodi, $perhitungan); 
                 if (count($rekomendasi_prodi) == 3) {
                     break;
                 }
@@ -184,7 +184,7 @@ class DataSiswaController {
                 }
                 if($isSame){
                     // Rekomendasi prodi berdasarkan minat dan bakat
-                    array_push($rekomendasi_prodi, $prodi);
+                    // array_push($rekomendasi_prodi, $prodi);
                 }
                 $isSame = true;
             }
