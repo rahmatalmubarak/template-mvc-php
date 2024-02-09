@@ -7,6 +7,7 @@ use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataAlternatif;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataKriteria;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataPerhitungan;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataSiswa;
+use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataSubAlternatif;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataSubKriteria;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\User;
 
@@ -18,6 +19,7 @@ class DataSiswaController {
     private $dataSubKriteria;
     private $dataPerhitungan;
     private $dataAlternatif;
+    private $dataSubAlternatif;
 
     public function __construct() {
         $this->dataSiswa = new DataSiswa;
@@ -27,6 +29,7 @@ class DataSiswaController {
         $this->helper = new Helper;
         $this->dataPerhitungan = new DataPerhitungan;
         $this->dataAlternatif = new DataAlternatif;
+        $this->dataSubAlternatif = new DataSubAlternatif;
     }
 
     public function index(){
@@ -80,11 +83,11 @@ class DataSiswaController {
 
         $data_sub_kriteria = $this->dataSubKriteria->all();
         $sub_kriteria_split = $this->helper->sub_kriteria_split($data_sub_kriteria);
-        
         if($dataSiswaData){
             $result = [
                 'userData' => $userData,
                 'dataSiswaData'=>$dataSiswaData,
+                'dataKriteria'=>$sub_kriteria_split,
                 'dataPrestasiAkademik'=>$sub_kriteria_split['data_prestasi_akademik']
             ];
             $response = $this->helper->ResponseData($result, "Data Berhasil Ditampilkan", false);
@@ -164,6 +167,58 @@ class DataSiswaController {
                 }
             }
         }
+
+        $data_kriteria = $this->dataKriteria->count_page();
+        $data_sub_alternatif = $this->dataSubAlternatif->count_page();
+        $dataAlternatif = $this->dataAlternatif->count_page();
+        $data_sub_alternatif_filter = [];
+        foreach ($data_sub_alternatif as $key => $sub_alternatif) {
+            if($data_siswa['Nilai_Rapor'] < 50 && $sub_alternatif['Nama'] == "0 – 50"){
+                $data_sub_alternatif_filter[$key] = $sub_alternatif;
+            }else if($data_siswa['Nilai_Rapor'] >= 51 && $data_siswa['Nilai_Rapor'] <= 65 && $sub_alternatif['Nama'] == "51– 65"){
+                $data_sub_alternatif_filter[$key] = $sub_alternatif;
+            }else if($data_siswa['Nilai_Rapor'] >= 66 && $data_siswa['Nilai_Rapor'] <= 75 && $sub_alternatif['Nama'] == "66 – 75"){
+                $data_sub_alternatif_filter[$key] = $sub_alternatif;
+            }else if($data_siswa['Nilai_Rapor'] >= 76 && $data_siswa['Nilai_Rapor'] <= 85 && $sub_alternatif['Nama'] == "76 – 85"){
+                $data_sub_alternatif_filter[$key] = $sub_alternatif;
+            } else if ($data_siswa['Nilai_Rapor'] >= 86 && $data_siswa['Nilai_Rapor'] <= 100 && $sub_alternatif['Nama'] == "86 – 100") {
+                $data_sub_alternatif_filter[$key] = $sub_alternatif;
+            }
+
+            if($data_siswa['Minat_Bakat'] == $sub_alternatif['Nama']){
+                $data_sub_alternatif_filter[$key] = $sub_alternatif;
+            }
+
+            if($data_siswa['Prestasi_Akademik'] == $sub_alternatif['Nama']. ' ' . $sub_alternatif['Bobot']){
+                $data_sub_alternatif_filter[$key] = $sub_alternatif;
+            }
+
+            if($data_siswa['Penghasilan_Ortu'] == $sub_alternatif['Nama']){
+                $data_sub_alternatif_filter[$key] = $sub_alternatif;
+            }
+
+        }
+
+        $matriks = $this->helper->perhitungan_matriks_sub_alternatif($data_sub_alternatif_filter, $data_kriteria);
+        foreach ($dataAlternatif as $key => $alternatif) {
+            $nilai = 0;
+            foreach ($matriks as $key2 => $sub_alternatif) {
+                if($sub_alternatif['Id_Alternatif'] == $alternatif['Id_Alternatif']){
+                    $nilai += $sub_alternatif['Nilai_Akhir'];
+                }
+            }
+            $dataAlternatif[$key]['Nilai'] = $nilai;
+        }
+        $a = 0;
+        $alternatif_new= [];
+        foreach ($dataAlternatif as $key => $alternatif) {
+            if($alternatif['Nilai'] > $a){
+                $alternatif_new = $alternatif;
+            }  
+        }
+        if($alternatif_new){
+            array_push($rekomendasi_prodi, $alternatif_new);
+        }
         $result = [
             'dataSiswa' => $data_user,
             'rekomendasiProdi' => $rekomendasi_prodi,
@@ -181,11 +236,20 @@ class DataSiswaController {
         View::render('Dashboard/DataSiswa/detail', $response);
         View::render('Dashboard/Templates/footer'); 
     }
+
+    public function tes()
+    {
+        $data['title'] = 'Hasil Rekomendasi Program Studi';
+        $result = $this->nilaiHasilAkhir();
+        $response = $this->helper->ResponseData($result, 'Data Berhasil Ditampilkan', false);
+        View::render('Dashboard/DataSiswa/tes',$response);
+    }
     
     public function cetakHasil(){
         $result = $this->nilaiHasilAkhir();
         $html = "<html>
-                <h2>Hasil Rekomendasi Program Studi<h2>";
+               <img src='" . BASE_URL . "img/logo_uin.jpg' alt='logo uin' style='display: block; float:left; width: 50px; height: auto'>
+                <h2 style='display: flex; width: 80%; justify-content: center; '>Laporan Hasil Rekomendasi Program Studi {$result['dataSiswa']['Nama_Lengkap']}<h2>";
         $html .= "<div style='font-size:15px;font-weight:normal'><div style='padding-top: 1rem'>
             <table>
                 <thead>
