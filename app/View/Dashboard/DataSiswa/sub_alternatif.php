@@ -53,16 +53,6 @@
                                         <td style="border: 1px solid black;"> <?= $rekomendasi_prodi["Nama"]?></td>
                                         <td style="border: 1px solid black;"> <?= $response["data"]["nilaiAkhirSiswa"]?></td>
                                     </tr>;
-                                    <tr>
-                                        <td style="border: 1px solid black;"> <?= $no++ ?></td>
-                                        <td style="border: 1px solid black;"> <?= $rekomendasi_prodi["Nama"]?></td>
-                                        <td style="border: 1px solid black;"> <?= $response["data"]["nilaiAkhirSiswa"]?></td>
-                                    </tr>;
-                                    <tr>
-                                        <td style="border: 1px solid black;"> <?= $no++ ?></td>
-                                        <td style="border: 1px solid black;"> <?= $rekomendasi_prodi["Nama"]?></td>
-                                        <td style="border: 1px solid black;"> <?= $response["data"]["nilaiAkhirSiswa"]?></td>
-                                    </tr>;
                                 <?php endforeach; ?>
                             </tbody>
                         </table>

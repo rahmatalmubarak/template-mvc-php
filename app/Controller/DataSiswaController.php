@@ -237,7 +237,7 @@ class DataSiswaController {
         View::render('Dashboard/Templates/footer'); 
     }
 
-    public function tes()
+    public function subAlternatif()
     {
         $data['title'] = 'Hasil Rekomendasi Program Studi';
         $result = $this->nilaiHasilAkhir();
@@ -247,53 +247,17 @@ class DataSiswaController {
     
     public function cetakHasil(){
         $result = $this->nilaiHasilAkhir();
-        $html = "<html>
-               <img src='" . BASE_URL . "img/logo_uin.jpg' alt='logo uin' style='display: block; float:left; width: 50px; height: auto'>
-                <h2 style='display: flex; width: 80%; justify-content: center; '>Laporan Hasil Rekomendasi Program Studi {$result['dataSiswa']['Nama_Lengkap']}<h2>";
-        $html .= "<div style='font-size:15px;font-weight:normal'><div style='padding-top: 1rem'>
-            <table>
-                <thead>
-                    <tr class='font-weight-bold'>
-                        <td style='width: 5 %;'>Nama</td>
-                        <td style='width: 90%;'>: ".$result['dataSiswa']['Nama_Lengkap']."</td>
-                    </tr>
-                    <tr class='font-weight-bold'>
-                        <td style='width: 5 %;'>Minat dan Bakat</td>
-                        <td style='width: 90%;'>: ".$result['dataSiswa']['dataSiswa']['Minat_Bakat']."</td>
-                    </tr>
-                    <tr class='font-weight-bold'>
-                        <td style='width: 5 %;'>Prestasi Akademik</td>
-                        <td style='width: 90%;'>: ".$result['dataSiswa']['dataSiswa']['Prestasi_Akademik']."</td>
-                    </tr>
-                    <tr class='font-weight-bold'>
-                        <td style='width: 5 %;'>Penghasilan Orang Tua</td>
-                        <td style='width: 90%;'>: ".$result['dataSiswa']['dataSiswa']['Penghasilan_Ortu']."</td>
-                </thead>
-            </table>
-            <div>
-                <p>Berdasarkan hasil pertimbangan dari Nilai, Minat dan Bakat, Prestasi Akademik dan Penghasilan Orang Tua. Maka, Siswa yang bernama ". $result['dataSiswa']['Nama_Lengkap']. " direkomendasikan untuk memilih program studi berikut untuk melanjutkan pendidikan ke perguruan tinggi.</p>
-            </div>
-            <div style='border-radius: .2rem!important;'>
-                <table style='width: 50%; border-collapse: collapse;'>
-                    <thead style='background-color: #78201a; color: white; text-align: center; border: 1px solid black;'>
-                        <tr class='font-weight-bold'>
-                            <th style='width: 10%;height: 20px;'>No</th>
-                            <th style='width: 80%;height: 20px;'>Program Studi</th>
-                            <th style='width: 10%;height: 20px;'>Point</th>
-                        </tr>
-                    </thead>
-                    <tbody>";
-                    $tr = ''; 
-                    $no = 1;
-                    foreach($result['rekomendasiProdi'] as $key => $rekomendasi_prodi){
-                        $tr .= "<tr>
-                            <td style='border: 1px solid black;'> ". $no++ . "</td>
-                            <td style='border: 1px solid black;'> " . $rekomendasi_prodi['Nama'] . "</td>
-                            <td style='border: 1px solid black;'> " . $result['nilaiAkhirSiswa'] . "</td>
-                        </tr>";
-                    }
-        $html .= $tr. "</tbody></table></div></div></div></html>";
+        $uri = $_SERVER['REQUEST_URI'];
+        $uri = explode('/', $uri);
+        $html = file_get_contents("http://localhost/" . $uri[1] . '/public/dashboard/data-siswa/cetak-view?id='.$_GET['id'] );
         $nama_file = "Rekomendasi Program Studi - " . $result['dataSiswa']['Nama_Lengkap'];
         $this->helper->cetak_pdf($html, $nama_file);
+    }
+
+    public function cetakView(){
+        $data['title'] = 'Hasil Rekomendasi Program Studi';
+        $result = $this->nilaiHasilAkhir();
+        $response = $this->helper->ResponseData($result, 'Data Berhasil Ditampilkan', false);
+        View::render('Dashboard/DataSiswa/cetak', $response);
     }
 }
