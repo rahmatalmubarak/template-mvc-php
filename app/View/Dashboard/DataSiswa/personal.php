@@ -64,17 +64,11 @@
                       <label for="exampleInputEmail1">Minat dan Bakat</label>
                       <select class="form-control" name="minat_bakat" id="minat_bakat" required>
                         <option value="">Pilih</option>
-                        <option value="Pemikiran Kritis dan Penelitian" <?= isset($response['data']['dataSiswaData']['Minat_Bakat']) && $response['data']['dataSiswaData']['Minat_Bakat'] == 'Pemikiran Kritis dan Penelitian' ? 'selected' : null ?>>Pemikiran Kritis dan Penelitian</option>
-                        <option value="Bahasa" <?= isset($response['data']['dataSiswaData']['Minat_Bakat']) && $response['data']['dataSiswaData']['Minat_Bakat'] == 'Bahasa' ? 'selected' : null ?>>Bahasa</option>
-                        <option value="Hukum" <?= isset($response['data']['dataSiswaData']['Minat_Bakat']) && $response['data']['dataSiswaData']['Minat_Bakat'] == 'Hukum' ? 'selected' : null ?>>Hukum</option>
-                        <option value="Agama" <?= isset($response['data']['dataSiswaData']['Minat_Bakat']) && $response['data']['dataSiswaData']['Minat_Bakat'] == 'Agama' ? 'selected' : null ?>>Agama</option>
-                        <option value="Pendidikan" <?= isset($response['data']['dataSiswaData']['Minat_Bakat']) && $response['data']['dataSiswaData']['Minat_Bakat'] == 'Pendidikan' ? 'selected' : null ?>>Pendidikan</option>
-                        <option value="Sains" <?= isset($response['data']['dataSiswaData']['Minat_Bakat']) && $response['data']['dataSiswaData']['Minat_Bakat'] == 'Sains' ? 'selected' : null ?>>Sains</option>
-                        <option value="Teknologi" <?= isset($response['data']['dataSiswaData']['Minat_Bakat']) && $response['data']['dataSiswaData']['Minat_Bakat'] == 'Teknologi' ? 'selected' : null ?>>Teknologi</option>
-                        <option value="Ilmu Sosial" <?= isset($response['data']['dataSiswaData']['Minat_Bakat']) && $response['data']['dataSiswaData']['Minat_Bakat'] == 'Ilmu Sosial' ? 'selected' : null ?>>Ilmu Sosial</option>
-                        <option value="Ekonomi" <?= isset($response['data']['dataSiswaData']['Minat_Bakat']) && $response['data']['dataSiswaData']['Minat_Bakat'] == 'Ekonomi' ? 'selected' : null ?>>Ekonomi</option>
-                        <option value="Bisnis dan Menajemen" <?= isset($response['data']['dataSiswaData']['Minat_Bakat']) && $response['data']['dataSiswaData']['Minat_Bakat'] == 'Bisnis dan Menajemen' ? 'selected' : null ?>>Bisnis dan Menajemen</option>
-                        <option value="Matematika" <?= isset($response['data']['dataSiswaData']['Minat_Bakat']) && $response['data']['dataSiswaData']['Minat_Bakat'] == 'Matematika' ? 'selected' : null ?>>Matematika</option>
+                        <?php 
+                            foreach ($response['data']['dataKriteria']['data_minat_bakat'] as $key => $data_minat_bakat) :
+                            ?>
+                            <option value="<?= $data_minat_bakat['Nama']?>" <?php if(isset($response['data']['dataSiswaData']['Minat_Bakat']) && $data_minat_bakat['Nama'] == $response['data']['dataSiswaData']['Minat_Bakat']) echo 'selected' ?>><?= $data_minat_bakat['Nama']?></option>
+                        <?php endforeach;?>
                       </select>
                     </div>
                     <div class="form-group">
@@ -84,18 +78,17 @@
                         <?php foreach ($response['data']['dataPrestasiAkademik'] as $key => $prestasiAkademik) : ?>
                           <option value="<?= $prestasiAkademik['Nama'] . ' ' . $prestasiAkademik['Bobot'] ?>" <?= isset($response['data']['dataSiswaData']['Prestasi_Akademik']) && $prestasiAkademik['Nama'] . ' ' . $prestasiAkademik['Bobot'] == $response['data']['dataSiswaData']['Prestasi_Akademik'] ? 'selected' : NULL; ?>><?= $prestasiAkademik['Nama'] . ' ' . $prestasiAkademik['Bobot']; ?></option>
                         <?php endforeach; ?>
-
                       </select>
                     </div>
                     <div class="form-group">
                       <label for="exampleInputEmail1">Penghasilan Orang Tua</label>
                       <select class="form-control" name="penghasilan_orang_tua" id="penghasilan_orang_tua" required>
                         <option value="">Pilih</option>
-                        <option value="500.000 s/d 1.400.000" <?= isset($response['data']['dataSiswaData']['Penghasilan_Ortu']) && $response['data']['dataSiswaData']['Penghasilan_Ortu'] == '500.000 s/d 1.400.000' ? 'selected' : null ?>>500.000 s/d 1.400.000</option>
-                        <option value="1.500.000 s/d 2.400.000" <?= isset($response['data']['dataSiswaData']['Penghasilan_Ortu']) && $response['data']['dataSiswaData']['Penghasilan_Ortu'] == '1.500.000 s/d 2.400.000' ? 'selected' : null ?>>1.500.000 s/d 2.400.000</option>
-                        <option value="2.500.000 s/d 3.400.000" <?= isset($response['data']['dataSiswaData']['Penghasilan_Ortu']) && $response['data']['dataSiswaData']['Penghasilan_Ortu'] == '2.500.000 s/d 3.400.000' ? 'selected' : null ?>>2.500.000 s/d 3.400.000</option>
-                        <option value="3.500.000 s/d 5.000.000" <?= isset($response['data']['dataSiswaData']['Penghasilan_Ortu']) && $response['data']['dataSiswaData']['Penghasilan_Ortu'] == '3.500.000 s/d 5.000.000' ? 'selected' : null ?>>3.500.000 s/d 5.000.000</option>
-                        <option value="5.100.000 s/d 10.000.000" <?= isset($response['data']['dataSiswaData']['Penghasilan_Ortu']) && $response['data']['dataSiswaData']['Penghasilan_Ortu'] == '5.100.000 s/d 10.000.000' ? 'selected' : null ?>>5.100.000 s/d 10.000.000</option>
+                        <?php 
+                            foreach ($response['data']['dataKriteria']['data_penghasilan_orang_tua'] as $key => $data_penghasilan_orang_tua) :
+                            ?>
+                            <option value="<?= $data_penghasilan_orang_tua['Nama']?>" <?php if(isset($response['data']['dataSiswaData']['Penghasilan_Ortu']) && $data_penghasilan_orang_tua['Nama'] == $response['data']['dataSiswaData']['Penghasilan_Ortu']) echo 'selected' ?>><?= $data_penghasilan_orang_tua['Nama']?></option>
+                        <?php endforeach;?>
                       </select>
                     </div>
                   </div>

@@ -64,6 +64,7 @@
                                             <td><?= $response['data']['no']++ ?></td>
                                             <td><?= $data_alternatif['Nama']; ?></td>
                                             <td>
+                                                <a href="<?= BASE_URL; ?>dashboard/alternatif/pembobotan?id=<?= $data_alternatif['Id_Alternatif']; ?>" class="badge bg-primary" style="padding: 10px;"><i class="fas fa-eye"></i></a>
                                                 <a href="<?= BASE_URL; ?>dashboard/alternatif/edit?id=<?= $data_alternatif['Id_Alternatif']; ?>" class="badge bg-warning" style="padding: 10px;"><i class="fas fa-pen"></i></a>
                                                 <a href="<?= BASE_URL; ?>dashboard/alternatif/delete?id=<?= $data_alternatif['Id_Alternatif']; ?>" class="badge bg-danger" style="padding: 10px;"><i class="fas fa-trash"></i></a>
                                             </td>

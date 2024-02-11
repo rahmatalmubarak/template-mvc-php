@@ -52,6 +52,7 @@
                                                 <th>No</th>
                                                 <th>Program Studi</th>
                                                 <th>Point</th>
+                                                <th>Nilai</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -61,6 +62,7 @@
                                                     <td><?= $no++ ?></td>
                                                     <td><?= $rekomendasi_prodi['Nama'] ?></td>
                                                     <td><?= $response['data']['nilaiAkhirSiswa'] ?></td>
+                                                    <td><?= $rekomendasi_prodi['Nilai'] ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                         </tbody>

@@ -8,6 +8,7 @@ use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataKlasifikasiMinatBakat;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataKriteria;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataPerhitungan;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataSiswa;
+use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataSubAlternatif;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataSubKriteria;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\User;
 
@@ -19,7 +20,7 @@ class DataSiswaController {
     private $dataSubKriteria;
     private $dataPerhitungan;
     private $dataAlternatif;
-    private $dataKlasifikasiMinatBakat;
+    private $dataSubAlternatif;
 
     public function __construct() {
         $this->dataSiswa = new DataSiswa;
@@ -29,7 +30,7 @@ class DataSiswaController {
         $this->helper = new Helper;
         $this->dataPerhitungan = new DataPerhitungan;
         $this->dataAlternatif = new DataAlternatif;
-        $this->dataKlasifikasiMinatBakat = new DataKlasifikasiMinatBakat;
+        $this->dataSubAlternatif = new DataSubAlternatif;
     }
 
     public function index(){
@@ -83,11 +84,11 @@ class DataSiswaController {
 
         $data_sub_kriteria = $this->dataSubKriteria->all();
         $sub_kriteria_split = $this->helper->sub_kriteria_split($data_sub_kriteria);
-        
         if($dataSiswaData){
             $result = [
                 'userData' => $userData,
                 'dataSiswaData'=>$dataSiswaData,
+                'dataKriteria'=>$sub_kriteria_split,
                 'dataPrestasiAkademik'=>$sub_kriteria_split['data_prestasi_akademik']
             ];
             $response = $this->helper->ResponseData($result, "Data Berhasil Ditampilkan", false);
@@ -168,26 +169,57 @@ class DataSiswaController {
                 }
             }
         }
-        
-        $id_sub_kriteria_minat_bakat = $this->dataSubKriteria->getWithParams('Nama', $data_user['dataSiswa']['Minat_Bakat']);
-        $prodi_klasifikasi_minat_bakat = $this->dataKlasifikasiMinatBakat->getWithParamsAll('Id_Sub_Kriteria', $id_sub_kriteria_minat_bakat['Id_Sub_Kriteria']);
-        $isSame = true;
-        if(count($prodi_klasifikasi_minat_bakat) > 0){
-            foreach ($prodi_klasifikasi_minat_bakat as $key => $prodi) {
-                foreach ($rekomendasi_prodi as $key => $_prodi) {
-                    if($_prodi['Nama'] == $prodi['Nama']){
-                        unset($prodi['Id_Klasifikasi_Minat_Bakat']);
-                        unset($prodi['Id_Sub_Kriteria']);
-                        unset($prodi['Bobot']);
-                        $isSame = false;
-                    }
-                }
-                if($isSame){
-                    // Rekomendasi prodi berdasarkan minat dan bakat
-                    // array_push($rekomendasi_prodi, $prodi);
-                }
-                $isSame = true;
+
+        $data_kriteria = $this->dataKriteria->count_page();
+        $data_sub_alternatif = $this->dataSubAlternatif->count_page();
+        $dataAlternatif = $this->dataAlternatif->count_page();
+        $data_sub_alternatif_filter = [];
+        foreach ($data_sub_alternatif as $key => $sub_alternatif) {
+            if($data_siswa['Nilai_Rapor'] < 50 && $sub_alternatif['Nama'] == "0 – 50"){
+                $data_sub_alternatif_filter[$key] = $sub_alternatif;
+            }else if($data_siswa['Nilai_Rapor'] >= 51 && $data_siswa['Nilai_Rapor'] <= 65 && $sub_alternatif['Nama'] == "51– 65"){
+                $data_sub_alternatif_filter[$key] = $sub_alternatif;
+            }else if($data_siswa['Nilai_Rapor'] >= 66 && $data_siswa['Nilai_Rapor'] <= 75 && $sub_alternatif['Nama'] == "66 – 75"){
+                $data_sub_alternatif_filter[$key] = $sub_alternatif;
+            }else if($data_siswa['Nilai_Rapor'] >= 76 && $data_siswa['Nilai_Rapor'] <= 85 && $sub_alternatif['Nama'] == "76 – 85"){
+                $data_sub_alternatif_filter[$key] = $sub_alternatif;
+            } else if ($data_siswa['Nilai_Rapor'] >= 86 && $data_siswa['Nilai_Rapor'] <= 100 && $sub_alternatif['Nama'] == "86 – 100") {
+                $data_sub_alternatif_filter[$key] = $sub_alternatif;
             }
+
+            if($data_siswa['Minat_Bakat'] == $sub_alternatif['Nama']){
+                $data_sub_alternatif_filter[$key] = $sub_alternatif;
+            }
+
+            if($data_siswa['Prestasi_Akademik'] == $sub_alternatif['Nama']. ' ' . $sub_alternatif['Bobot']){
+                $data_sub_alternatif_filter[$key] = $sub_alternatif;
+            }
+
+            if($data_siswa['Penghasilan_Ortu'] == $sub_alternatif['Nama']){
+                $data_sub_alternatif_filter[$key] = $sub_alternatif;
+            }
+
+        }
+
+        $matriks = $this->helper->perhitungan_matriks_sub_alternatif($data_sub_alternatif_filter, $data_kriteria);
+        foreach ($dataAlternatif as $key => $alternatif) {
+            $nilai = 0;
+            foreach ($matriks as $key2 => $sub_alternatif) {
+                if($sub_alternatif['Id_Alternatif'] == $alternatif['Id_Alternatif']){
+                    $nilai += $sub_alternatif['Nilai_Akhir'];
+                }
+            }
+            $dataAlternatif[$key]['Nilai'] = $nilai;
+        }
+        $a = 0;
+        $alternatif_new= [];
+        foreach ($dataAlternatif as $key => $alternatif) {
+            if($alternatif['Nilai'] > $a){
+                $alternatif_new = $alternatif;
+            }  
+        }
+        if($alternatif_new){
+            array_push($rekomendasi_prodi, $alternatif_new);
         }
         $result = [
             'dataSiswa' => $data_user,
@@ -206,55 +238,28 @@ class DataSiswaController {
         View::render('Dashboard/DataSiswa/detail', $response);
         View::render('Dashboard/Templates/footer'); 
     }
+
+    public function subAlternatif()
+    {
+        $data['title'] = 'Hasil Rekomendasi Program Studi';
+        $result = $this->nilaiHasilAkhir();
+        $response = $this->helper->ResponseData($result, 'Data Berhasil Ditampilkan', false);
+        View::render('Dashboard/DataSiswa/tes',$response);
+    }
     
     public function cetakHasil(){
         $result = $this->nilaiHasilAkhir();
-        $html = "<html>
-                <h2>Hasil Rekomendasi Program Studi<h2>";
-        $html .= "<div style='font-size:15px;font-weight:normal'><div style='padding-top: 1rem'>
-            <table>
-                <thead>
-                    <tr class='font-weight-bold'>
-                        <td style='width: 5 %;'>Nama</td>
-                        <td style='width: 90%;'>: ".$result['dataSiswa']['Nama_Lengkap']."</td>
-                    </tr>
-                    <tr class='font-weight-bold'>
-                        <td style='width: 5 %;'>Minat dan Bakat</td>
-                        <td style='width: 90%;'>: ".$result['dataSiswa']['dataSiswa']['Minat_Bakat']."</td>
-                    </tr>
-                    <tr class='font-weight-bold'>
-                        <td style='width: 5 %;'>Prestasi Akademik</td>
-                        <td style='width: 90%;'>: ".$result['dataSiswa']['dataSiswa']['Prestasi_Akademik']."</td>
-                    </tr>
-                    <tr class='font-weight-bold'>
-                        <td style='width: 5 %;'>Penghasilan Orang Tua</td>
-                        <td style='width: 90%;'>: ".$result['dataSiswa']['dataSiswa']['Penghasilan_Ortu']."</td>
-                </thead>
-            </table>
-            <div>
-                <p>Berdasarkan hasil pertimbangan dari Nilai, Minat dan Bakat, Prestasi Akademik dan Penghasilan Orang Tua. Maka, Siswa yang bernama ". $result['dataSiswa']['Nama_Lengkap']. " direkomendasikan untuk memilih program studi berikut untuk melanjutkan pendidikan ke perguruan tinggi.</p>
-            </div>
-            <div style='border-radius: .2rem!important;'>
-                <table style='width: 50%; border-collapse: collapse;'>
-                    <thead style='background-color: #78201a; color: white; text-align: center; border: 1px solid black;'>
-                        <tr class='font-weight-bold'>
-                            <th style='width: 10%;height: 20px;'>No</th>
-                            <th style='width: 80%;height: 20px;'>Program Studi</th>
-                            <th style='width: 10%;height: 20px;'>Point</th>
-                        </tr>
-                    </thead>
-                    <tbody>";
-                    $tr = ''; 
-                    $no = 1;
-                    foreach($result['rekomendasiProdi'] as $key => $rekomendasi_prodi){
-                        $tr .= "<tr>
-                            <td style='border: 1px solid black;'> ". $no++ . "</td>
-                            <td style='border: 1px solid black;'> " . $rekomendasi_prodi['Nama'] . "</td>
-                            <td style='border: 1px solid black;'> " . $result['nilaiAkhirSiswa'] . "</td>
-                        </tr>";
-                    }
-        $html .= $tr. "</tbody></table></div></div></div></html>";
+        $uri = $_SERVER['REQUEST_URI'];
+        $uri = explode('/', $uri);
+        $html = file_get_contents("http://localhost/" . $uri[1] . '/public/dashboard/data-siswa/cetak-view?id='.$_GET['id'] );
         $nama_file = "Rekomendasi Program Studi - " . $result['dataSiswa']['Nama_Lengkap'];
         $this->helper->cetak_pdf($html, $nama_file);
+    }
+
+    public function cetakView(){
+        $data['title'] = 'Hasil Rekomendasi Program Studi';
+        $result = $this->nilaiHasilAkhir();
+        $response = $this->helper->ResponseData($result, 'Data Berhasil Ditampilkan', false);
+        View::render('Dashboard/DataSiswa/cetak', $response);
     }
 }

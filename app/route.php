@@ -9,6 +9,7 @@ use SistemPendukungKeputusan\UINIB\PHP\MVC\Controller\HasilAkhirController;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Controller\KriteriaController;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Controller\PenilaianController;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Controller\PerhitunganController;
+use SistemPendukungKeputusan\UINIB\PHP\MVC\Controller\SubAlternatifController;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Controller\SubKriteriaController;
 
 // LOGIN
@@ -27,8 +28,10 @@ Router::add('POST', '/dashboard/profil/ubah-password/edit', ProfilController::cl
 Router::add('GET', '/dashboard/profil/data-siswa', DataSiswaController::class, 'personal', [AuthMiddleware::class]);
 Router::add('POST', '/dashboard/profil/data-siswa/edit', DataSiswaController::class, 'prosesEditDataSiswa', [AuthMiddleware::class]);
 Router::add('GET', '/dashboard/data-siswa', DataSiswaController::class, 'index', [AuthMiddleware::class]);
+Router::add('GET', '/dashboard/data-siswa/sub-alternatif', DataSiswaController::class, 'subAlternatif', [AuthMiddleware::class]);
 Router::add('GET', '/dashboard/data-siswa/hasil', DataSiswaController::class, 'hasil', [AuthMiddleware::class]);
 Router::add('GET', '/dashboard/data-siswa/cetak-hasil', DataSiswaController::class, 'cetakHasil', [AuthMiddleware::class]);
+Router::add('GET', '/dashboard/data-siswa/cetak-view', DataSiswaController::class, 'cetakView');
 Router::add('GET', '/dashboard/profil/data-siswa/hasil', DataSiswaController::class, 'hasil', [AuthMiddleware::class]);
 
 // Data Kriteria
@@ -53,6 +56,12 @@ Router::add('POST', '/dashboard/alternatif/add/proses-tambah-alternatif', Altern
 Router::add('POST', '/dashboard/alternatif/edit/proses-edit-alternatif', AlternatifController::class, 'ubahAlternatif', [AuthMiddleware::class]);
 Router::add('GET', '/dashboard/alternatif/delete', AlternatifController::class, 'hapusAlternatif', [AuthMiddleware::class]);
 
+// Sub Alternatif
+Router::add('GET', '/dashboard/alternatif/pembobotan', SubAlternatifController::class, 'index', [AuthMiddleware::class]);
+Router::add('POST', '/dashboard/alternatif/pembobotan/add/proses-tambah-sub-alternatif', SubAlternatifController::class, 'tambahSubAlternatif', [AuthMiddleware::class]);
+Router::add('POST', '/dashboard/alternatif/pembobotan/edit/proses-edit-sub-alternatif', SubAlternatifController::class, 'ubahSubAlternatif', [AuthMiddleware::class]);
+Router::add('GET', '/dashboard/alternatif/pembobotan/delete', SubAlternatifController::class, 'hapusSubAlternatif', [AuthMiddleware::class]);
+
 // Penilaian
 Router::add('GET', '/dashboard/penilaian', PenilaianController::class, 'index', [AuthMiddleware::class]);
 Router::add('POST', '/dashboard/penilaian/add/proses-tambah-penilaian', PenilaianController::class, 'tambahPenilaian', [AuthMiddleware::class]);
@@ -66,5 +75,6 @@ Router::add('POST', '/dashboard/perhitungan/edit/proses-edit-perhitungan', Perhi
 // Hasil Akhir
 Router::add('GET', '/dashboard/hasil-akhir', HasilAkhirController::class, 'index', [AuthMiddleware::class]);
 Router::add('GET', '/dashboard/hasil-akhir/cetak', HasilAkhirController::class, 'cetakHasilAkhir', [AuthMiddleware::class]);
+
 
 Router::run();
