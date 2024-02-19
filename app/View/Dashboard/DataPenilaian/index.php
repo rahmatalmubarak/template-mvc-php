@@ -1,10 +1,16 @@
 <?php
 
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataPenilaian;
+use SistemPendukungKeputusan\UINIB\PHP\MVC\Helpers\Helper;
+use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataSubAlternatif;
 
 $data_penilaian = new DataPenilaian;
+$data_sub_alternatif = new DataSubAlternatif;
+$helper = new Helper;
 $cari_data = isset($_GET['cari_data']) ? $_GET['cari_data'] : null;
-$jumlah_data = isset($_GET['jumlah_data']) ? $_GET['jumlah_data'] : 10; ?>
+$jumlah_data = isset($_GET['jumlah_data']) ? $_GET['jumlah_data'] : 10;
+
+?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -75,8 +81,25 @@ $jumlah_data = isset($_GET['jumlah_data']) ? $_GET['jumlah_data'] : 10; ?>
                                 <tbody>
                                     <?php
                                     $no = 1;
+                                    $id_kriteria_rapor = $response['data']['dataNilaiRapor'][0]['Id_Kriteria'];
+                                    $id_kriteria_minat_bakat = $response['data']['dataMinatBakat'][0]['Id_Kriteria'];
+                                    $id_kriteria_prestasi = $response['data']['dataPrestasiAkademik'][0]['Id_Kriteria'];
+                                    $id_kriteria_penghasilan = $response['data']['dataPenghasilanOrangTua'][0]['Id_Kriteria'];
+
                                     foreach ($response['data']['dataAlternatif'] as $key => $data_alternatif) :
                                         $dataPenilaian = $data_penilaian->getWithParamsAll('Id_Alternatif', $data_alternatif['Id_Alternatif']);
+
+                                        // Rapor
+                                        $dataSubAlternatifRapor = $data_sub_alternatif->getWithNilaiParams($id_kriteria_rapor, $data_alternatif['Id_Alternatif']);
+
+                                        // Minat Bakat
+                                        $dataSubAlternatifMinatBakat = $data_sub_alternatif->getWithNilaiParams($id_kriteria_minat_bakat, $data_alternatif['Id_Alternatif']);
+
+                                        // Prestasi Akademik
+                                        $dataSubAlternatifPrestasiAkademik = $data_sub_alternatif->getWithNilaiParams($id_kriteria_prestasi, $data_alternatif['Id_Alternatif']);
+
+                                        // Penghasilan Orang Tua
+                                        $dataSubAlternatifPenghasilanOrangTua = $data_sub_alternatif->getWithNilaiParams($id_kriteria_penghasilan, $data_alternatif['Id_Alternatif']);
                                     ?>
                                         <tr>
                                             <td><?= $response['data']['no']++ ?></td>
@@ -112,8 +135,14 @@ $jumlah_data = isset($_GET['jumlah_data']) ? $_GET['jumlah_data'] : 10; ?>
                                                                                 <label for="nilai">Nilai</label>
                                                                                 <select class="form-control" name="nilai" id="nilai" required>
                                                                                     <option value="">Pilih</option>
-                                                                                    <?php foreach ($response['data']['dataNilaiRapor'] as $key => $sub_kriteria) : ?>
+                                                                                    <!-- Fitur Lama -->
+                                                                                    <!-- <?php foreach ($response['data']['dataNilaiRapor'] as $key => $sub_kriteria) : ?>
                                                                                         <option value="<?= $sub_kriteria['Id_Sub_Kriteria'] ?>"><?= $sub_kriteria['Nama'] ?></option>
+                                                                                    <?php endforeach; ?> -->
+
+                                                                                    <!-- Fitur Baru -->
+                                                                                    <?php foreach ($dataSubAlternatifRapor as $key => $sub_kriteria) : ?>
+                                                                                        <option value="<?= $sub_kriteria['Id_Sub_Alternatif'] ?>"><?= $sub_kriteria['Nama'] ?></option>
                                                                                     <?php endforeach; ?>
                                                                                 </select>
                                                                             </div>
@@ -121,8 +150,14 @@ $jumlah_data = isset($_GET['jumlah_data']) ? $_GET['jumlah_data'] : 10; ?>
                                                                                 <label for="minat_bakat">Minat dan Bakat</label>
                                                                                 <select class="form-control" name="minat_bakat" id="minat_bakat" required>
                                                                                     <option value="">Pilih</option>
-                                                                                    <?php foreach ($response['data']['dataMinatBakat'] as $key => $sub_kriteria) : ?>
+                                                                                    <!-- Fitur Lama -->
+                                                                                    <!-- <?php foreach ($response['data']['dataMinatBakat'] as $key => $sub_kriteria) : ?>
                                                                                         <option value="<?= $sub_kriteria['Id_Sub_Kriteria'] ?>"><?= $sub_kriteria['Nama'] ?></option>
+                                                                                    <?php endforeach; ?> -->
+
+                                                                                    <!-- Fitur Baru -->
+                                                                                    <?php foreach ($dataSubAlternatifMinatBakat as $key => $sub_kriteria) : ?>
+                                                                                        <option value="<?= $sub_kriteria['Id_Sub_Alternatif'] ?>"><?= $sub_kriteria['Nama'] ?></option>
                                                                                     <?php endforeach; ?>
                                                                                 </select>
                                                                             </div>
@@ -130,8 +165,14 @@ $jumlah_data = isset($_GET['jumlah_data']) ? $_GET['jumlah_data'] : 10; ?>
                                                                                 <label for="prestasi_akademik">Prestasi Akademik</label>
                                                                                 <select class="form-control" name="prestasi_akademik" id="prestasi_akademik" required>
                                                                                     <option value="">Pilih</option>
-                                                                                    <?php foreach ($response['data']['dataPrestasiAkademik'] as $key => $sub_kriteria) : ?>
+                                                                                    <!-- Fitur Lama -->
+                                                                                    <!-- <?php foreach ($response['data']['dataPrestasiAkademik'] as $key => $sub_kriteria) : ?>
                                                                                         <option value="<?= $sub_kriteria['Id_Sub_Kriteria'] ?>"><?= $sub_kriteria['Nama'] . " " . $sub_kriteria['Bobot'] ?></option>
+                                                                                    <?php endforeach; ?> -->
+
+                                                                                    <!-- Fitur Baru -->
+                                                                                    <?php foreach ($dataSubAlternatifPrestasiAkademik as $key => $sub_kriteria) : ?>
+                                                                                        <option value="<?= $sub_kriteria['Id_Sub_Alternatif'] ?>"><?= $sub_kriteria['Nama'] . " " . $sub_kriteria['Bobot'] ?></option>
                                                                                     <?php endforeach; ?>
                                                                                 </select>
                                                                             </div>
@@ -139,8 +180,14 @@ $jumlah_data = isset($_GET['jumlah_data']) ? $_GET['jumlah_data'] : 10; ?>
                                                                                 <label for="penghasilan_orang_tua">Penghasilan Orang Tua</label>
                                                                                 <select class="form-control" name="penghasilan_orang_tua" id="penghasilan_orang_tua" required>
                                                                                     <option value="">Pilih</option>
-                                                                                    <?php foreach ($response['data']['dataPenghasilanOrangTua'] as $key => $sub_kriteria) : ?>
+                                                                                    <!-- Fitur Lama -->
+                                                                                    <!-- <?php foreach ($response['data']['dataPenghasilanOrangTua'] as $key => $sub_kriteria) : ?>
                                                                                         <option value="<?= $sub_kriteria['Id_Sub_Kriteria'] ?>"><?= $sub_kriteria['Nama'] ?></option>
+                                                                                    <?php endforeach; ?> -->
+
+                                                                                    <!-- Fitur Baru -->
+                                                                                    <?php foreach ($dataSubAlternatifPenghasilanOrangTua as $key => $sub_kriteria) : ?>
+                                                                                        <option value="<?= $sub_kriteria['Id_Sub_Alternatif'] ?>"><?= $sub_kriteria['Nama'] ?></option>
                                                                                     <?php endforeach; ?>
                                                                                 </select>
                                                                             </div>
@@ -177,8 +224,9 @@ $jumlah_data = isset($_GET['jumlah_data']) ? $_GET['jumlah_data'] : 10; ?>
                                                                                 <label for="nilai">Nilai</label>
                                                                                 <select class="form-control" name="nilai" id="nilai" required>
                                                                                     <option value="">Pilih</option>
-                                                                                    <?php foreach ($response['data']['dataNilaiRapor'] as $key => $sub_kriteria) : ?>
-                                                                                        <option value="<?= $sub_kriteria['Id_Sub_Kriteria'] ?>" <?= isset($dataPenilaian[0]['Id_Sub_Kriteria']) && $dataPenilaian[0]['Id_Sub_Kriteria']  == $sub_kriteria['Id_Sub_Kriteria'] ? 'selected' : NULL; ?>><?= $sub_kriteria['Nama'] ?></option>
+                                                                                    <!-- Fitur Baru -->
+                                                                                    <?php foreach ($dataSubAlternatifRapor as $key => $sub_kriteria) : ?>
+                                                                                        <option value="<?= $sub_kriteria['Id_Sub_Alternatif'] ?>" <?= isset($dataPenilaian[0]['Id_Sub_Alternatif']) && $dataPenilaian[0]['Id_Sub_Alternatif']  == $sub_kriteria['Id_Sub_Alternatif'] ? 'selected' : NULL; ?>><?= $sub_kriteria['Nama'] ?></option>
                                                                                     <?php endforeach; ?>
                                                                                 </select>
                                                                             </div>
@@ -186,8 +234,9 @@ $jumlah_data = isset($_GET['jumlah_data']) ? $_GET['jumlah_data'] : 10; ?>
                                                                                 <label for="minat_bakat">Minat dan Bakat</label>
                                                                                 <select class="form-control" name="minat_bakat" id="minat_bakat" required>
                                                                                     <option value="">Pilih</option>
-                                                                                    <?php foreach ($response['data']['dataMinatBakat'] as $key => $sub_kriteria) : ?>
-                                                                                        <option value="<?= $sub_kriteria['Id_Sub_Kriteria'] ?>" <?= isset($dataPenilaian[1]['Id_Sub_Kriteria']) && $dataPenilaian[1]['Id_Sub_Kriteria'] == $sub_kriteria['Id_Sub_Kriteria'] ? 'selected' : NULL; ?>><?= $sub_kriteria['Nama'] ?></option>
+                                                                                    <!-- Fitur Baru -->
+                                                                                    <?php foreach ($dataSubAlternatifMinatBakat as $key => $sub_kriteria) : ?>
+                                                                                        <option value="<?= $sub_kriteria['Id_Sub_Alternatif'] ?>" <?= isset($dataPenilaian[1]['Id_Sub_Alternatif']) && $dataPenilaian[1]['Id_Sub_Alternatif']  == $sub_kriteria['Id_Sub_Alternatif'] ? 'selected' : NULL; ?>><?= $sub_kriteria['Nama'] ?></option>
                                                                                     <?php endforeach; ?>
                                                                                 </select>
                                                                             </div>
@@ -195,8 +244,9 @@ $jumlah_data = isset($_GET['jumlah_data']) ? $_GET['jumlah_data'] : 10; ?>
                                                                                 <label for="prestasi_akademik">Prestasi Akademik</label>
                                                                                 <select class="form-control" name="prestasi_akademik" id="prestasi_akademik" required>
                                                                                     <option value="">Pilih</option>
-                                                                                    <?php foreach ($response['data']['dataPrestasiAkademik'] as $key => $sub_kriteria) : ?>
-                                                                                        <option value="<?= $sub_kriteria['Id_Sub_Kriteria'] ?>" <?= isset($dataPenilaian[2]['Id_Sub_Kriteria']) && $dataPenilaian[2]['Id_Sub_Kriteria'] == $sub_kriteria['Id_Sub_Kriteria'] ? 'selected' : NULL; ?>><?= $sub_kriteria['Nama'] . ' ' . $sub_kriteria['Bobot']; ?></option>
+                                                                                    <!-- Fitur Baru -->
+                                                                                    <?php foreach ($dataSubAlternatifPrestasiAkademik as $key => $sub_kriteria) : ?>
+                                                                                        <option value="<?= $sub_kriteria['Id_Sub_Alternatif'] ?>" <?= isset($dataPenilaian[2]['Id_Sub_Alternatif']) && $dataPenilaian[2]['Id_Sub_Alternatif']  == $sub_kriteria['Id_Sub_Alternatif'] ? 'selected' : NULL; ?>><?= $sub_kriteria['Nama'] . ' ' . $sub_kriteria['Bobot']?></option>
                                                                                     <?php endforeach; ?>
                                                                                 </select>
                                                                             </div>
@@ -204,8 +254,9 @@ $jumlah_data = isset($_GET['jumlah_data']) ? $_GET['jumlah_data'] : 10; ?>
                                                                                 <label for="penghasilan_orang_tua">Penghasilan Orang Tua</label>
                                                                                 <select class="form-control" name="penghasilan_orang_tua" id="penghasilan_orang_tua" required>
                                                                                     <option value="">Pilih</option>
-                                                                                    <?php foreach ($response['data']['dataPenghasilanOrangTua'] as $key => $sub_kriteria) : ?>
-                                                                                        <option value="<?= $sub_kriteria['Id_Sub_Kriteria'] ?>" <?= isset($dataPenilaian[3]['Id_Sub_Kriteria']) && $dataPenilaian[3]['Id_Sub_Kriteria'] == $sub_kriteria['Id_Sub_Kriteria'] ? 'selected' : NULL; ?>><?= $sub_kriteria['Nama'] ?></option>
+                                                                                    <!-- Fitur Baru -->
+                                                                                    <?php foreach ($dataSubAlternatifPenghasilanOrangTua as $key => $sub_kriteria) : ?>
+                                                                                        <option value="<?= $sub_kriteria['Id_Sub_Alternatif'] ?>" <?= isset($dataPenilaian[3]['Id_Sub_Alternatif']) && $dataPenilaian[3]['Id_Sub_Alternatif']  == $sub_kriteria['Id_Sub_Alternatif'] ? 'selected' : NULL; ?>><?= $sub_kriteria['Nama'] ?></option>
                                                                                     <?php endforeach; ?>
                                                                                 </select>
                                                                             </div>

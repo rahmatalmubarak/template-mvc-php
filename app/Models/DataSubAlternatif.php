@@ -65,6 +65,15 @@ class DataSubAlternatif{
         return $this->db->resultSet();
     }
 
+    public function getWithNilaiParams($id_kriteria, $id_alternatif)
+    {
+        $query = "SELECT * FROM sub_alternatif WHERE Id_kriteria = :id_kriteria AND Id_Alternatif = :id_alternatif";
+        $this->db->query($query);
+        $this->db->bind('id_kriteria', $id_kriteria);
+        $this->db->bind('id_alternatif', $id_alternatif);
+        return $this->db->resultSet();
+    }
+
     public function hapus($id_sub_alternatif){
         $query = "DELETE FROM sub_alternatif WHERE Id_Sub_Alternatif=:id_sub_alternatif";
         $this->db->query($query);

@@ -49,11 +49,33 @@ class DataPenilaian{
         return $this->db->rowCount();
     }
 
+    public function addWithSubAlternatif($data){
+        $query = "INSERT INTO penilaian(Id_Sub_Alternatif,Id_Kriteria,Id_Alternatif,Nilai) VALUES (:Id_Sub_Alternatif,:Id_Kriteria,:Id_Alternatif,:Nilai)";
+        $this->db->query($query);
+        $this->db->bind('Id_Sub_Alternatif', $data['Id_Sub_Alternatif']);
+        $this->db->bind('Id_Kriteria', $data['Id_Kriteria']);
+        $this->db->bind('Id_Alternatif', $data['Id_Alternatif']);
+        $this->db->bind('Nilai', $data['Nilai']);
+        $this->db->execute();
+        return $this->db->rowCount();
+    }
+
     public function edit($data){
         $query = "UPDATE penilaian SET Id_Sub_Kriteria=:Id_Sub_Kriteria,Nilai=:Nilai WHERE Id_Penilaian=:Id_Penilaian";
         $this->db->query($query);
         $this->db->bind('Id_Penilaian', $data['Id_Penilaian']);
         $this->db->bind('Id_Sub_Kriteria', $data['Id_Sub_Kriteria']);
+        $this->db->bind('Nilai', $data['Nilai']);
+        $this->db->execute();
+        return $this->db->rowCount();
+    }
+
+    public function editWithSubAlternatif($data){
+        $query = "UPDATE penilaian SET Id_Sub_Alternatif=:Id_Sub_Alternatif,Id_Kriteria=:Id_Kriteria,Nilai=:Nilai WHERE Id_Penilaian=:Id_Penilaian";
+        $this->db->query($query);
+        $this->db->bind('Id_Penilaian', $data['Id_Penilaian']);
+        $this->db->bind('Id_Sub_Alternatif', $data['Id_Sub_Alternatif']);
+        $this->db->bind('Id_Kriteria', $data['Id_Kriteria']);
         $this->db->bind('Nilai', $data['Nilai']);
         $this->db->execute();
         return $this->db->rowCount();

@@ -68,11 +68,11 @@
                                                                         <div class="form-group">
                                                                             <label for="nama">Nilai</label>
                                                                             <select class="form-control" name="nama" id="nama">
-                                                                                <option value="0 – 50" <?php if ($data_sub_alternatif['Nama'] == '0 – 50') echo 'selected'; ?>>0 – 50</option>
-                                                                                <option value="51– 65" <?php if ($data_sub_alternatif['Nama'] == '51– 65') echo 'selected'; ?>>51– 65</option>
-                                                                                <option value="66 – 75" <?php if ($data_sub_alternatif['Nama'] == '66 – 75') echo 'selected'; ?>>66 – 75</option>
-                                                                                <option value="76 – 85" <?php if ($data_sub_alternatif['Nama'] == '76 – 85') echo 'selected'; ?>>76 – 85</option>
-                                                                                <option value="86 – 100" <?php if ($data_sub_alternatif['Nama'] == '86 – 100') echo 'selected'; ?>>86 – 100</option>
+                                                                                <option value="0 - 50" <?php if ($data_sub_alternatif['Nama'] == '0 - 50') echo 'selected'; ?>>0 - 50</option>
+                                                                                <option value="51- 65" <?php if ($data_sub_alternatif['Nama'] == '51- 65') echo 'selected'; ?>>51- 65</option>
+                                                                                <option value="66 - 75" <?php if ($data_sub_alternatif['Nama'] == '66 - 75') echo 'selected'; ?>>66 - 75</option>
+                                                                                <option value="76 - 85" <?php if ($data_sub_alternatif['Nama'] == '76 - 85') echo 'selected'; ?>>76 - 85</option>
+                                                                                <option value="86 - 100" <?php if ($data_sub_alternatif['Nama'] == '86 - 100') echo 'selected'; ?>>86 - 100</option>
                                                                             </select>
                                                                         </div>
                                                                         <div class="form-group">
@@ -391,11 +391,11 @@
                                 <div class="form-group">
                                     <label for="nama">Nilai</label>
                                     <select class="form-control" name="nama" id="nama">
-                                        <option value="0 – 50">0 – 50</option>
-                                        <option value="51– 65">51– 65</option>
-                                        <option value="66 – 75">66 – 75</option>
-                                        <option value="76 – 85">76 – 85</option>
-                                        <option value="86 – 100">86 – 100</option>
+                                        <option value="0 - 50">0 - 50</option>
+                                        <option value="51- 65">51- 65</option>
+                                        <option value="66 - 75">66 - 75</option>
+                                        <option value="76 - 85">76 - 85</option>
+                                        <option value="86 - 100">86 - 100</option>
                                     </select>
                                 </div>
                                 <div class="form-group">

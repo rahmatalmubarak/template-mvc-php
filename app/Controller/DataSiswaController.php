@@ -132,11 +132,11 @@ class DataSiswaController {
         $kriteria_nilai_rapor = $this->dataKriteria->getWithParams('Nama_Kriteria', 'Nilai Rapor');
         $data_kriteria = $this->dataKriteria->count_page();
         $data_user['dataSiswa'] = $data_siswa;
-        
+
         $data_sub_kriteria = $this->dataSubKriteria->all();
         foreach ($data_sub_kriteria as $key => $sub_kriteria) {
             if ($sub_kriteria['Nama'] == $data_siswa['Minat_Bakat']) {
-                $data_user['Nilai']['Minat_Bakat'] = $sub_kriteria['Nilai'];
+                $data_user['Nilai']['Minat_dan_Bakat'] = $sub_kriteria['Nilai'];
             }
             if ($sub_kriteria['Id_Kriteria'] == $kriteria_nilai_rapor['Id_Kriteria']) {
                 $range_nilai = explode('-', $sub_kriteria['Nama']);
@@ -145,18 +145,22 @@ class DataSiswaController {
                 }
             }
             if ($sub_kriteria['Nama'] == $data_siswa['Penghasilan_Ortu']) {
-                $data_user['Nilai']['Penghasilan_Ortu'] = $sub_kriteria['Nilai'];
+                $data_user['Nilai']['Penghasilan_Orang_Tua'] = $sub_kriteria['Nilai'];
             }
             if ($sub_kriteria['Nama'] . " " . $sub_kriteria['Bobot'] == $data_siswa['Prestasi_Akademik']) {
                 $data_user['Nilai']['Prestasi_Akademik'] = $sub_kriteria['Nilai'];
             }
         }
         $max_min_nilai = $this->helper->max_min_nilai($this->dataAlternatif->count_page(), $data_kriteria);
-        $nilai_akhir = (round($data_user['Nilai']['Nilai_Rapor']/max($max_min_nilai['C1']),2) * $data_kriteria[0]['Bobot_Kriteria']) +
-        (round($data_user['Nilai']['Minat_Bakat']/max($max_min_nilai['C2']),2) * $data_kriteria[1]['Bobot_Kriteria']) +
-        (round($data_user['Nilai']['Prestasi_Akademik']/max($max_min_nilai['C3']),2) * $data_kriteria[2]['Bobot_Kriteria']) +
-        (round(min($max_min_nilai['C4'])/ $data_user['Nilai']['Penghasilan_Ortu'],2) * $data_kriteria[3]['Bobot_Kriteria']);
-
+        $nilai_akhir = 0;
+        foreach ($data_kriteria as $key => $kriteria) {
+            if($kriteria['Jenis_Kriteria'] == 'Benefit'){
+                $nilai_akhir += round($data_user['Nilai'][str_replace(' ','_', $kriteria['Nama_Kriteria'])]/max($max_min_nilai[$kriteria['Kode_Kriteria']]),2) * $kriteria['Bobot_Kriteria'];
+            }else{
+                $nilai_akhir += round(min($max_min_nilai[$kriteria['Kode_Kriteria']])/$data_user['Nilai'][str_replace(' ','_', $kriteria['Nama_Kriteria'])],2) * $kriteria['Bobot_Kriteria'];
+            }
+        }
+        
         $data_perhitungan = $this->dataPerhitungan->rangking();
 
         $rekomendasi_prodi = [];
@@ -175,15 +179,15 @@ class DataSiswaController {
         $dataAlternatif = $this->dataAlternatif->count_page();
         $data_sub_alternatif_filter = [];
         foreach ($data_sub_alternatif as $key => $sub_alternatif) {
-            if($data_siswa['Nilai_Rapor'] < 50 && $sub_alternatif['Nama'] == "0 – 50"){
+            if($data_siswa['Nilai_Rapor'] < 50 && $sub_alternatif['Nama'] == "0 - 50"){
                 $data_sub_alternatif_filter[$key] = $sub_alternatif;
-            }else if($data_siswa['Nilai_Rapor'] >= 51 && $data_siswa['Nilai_Rapor'] <= 65 && $sub_alternatif['Nama'] == "51– 65"){
+            }else if($data_siswa['Nilai_Rapor'] >= 51 && $data_siswa['Nilai_Rapor'] <= 65 && $sub_alternatif['Nama'] == "51- 65"){
                 $data_sub_alternatif_filter[$key] = $sub_alternatif;
-            }else if($data_siswa['Nilai_Rapor'] >= 66 && $data_siswa['Nilai_Rapor'] <= 75 && $sub_alternatif['Nama'] == "66 – 75"){
+            }else if($data_siswa['Nilai_Rapor'] >= 66 && $data_siswa['Nilai_Rapor'] <= 75 && $sub_alternatif['Nama'] == "66 - 75"){
                 $data_sub_alternatif_filter[$key] = $sub_alternatif;
-            }else if($data_siswa['Nilai_Rapor'] >= 76 && $data_siswa['Nilai_Rapor'] <= 85 && $sub_alternatif['Nama'] == "76 – 85"){
+            }else if($data_siswa['Nilai_Rapor'] >= 76 && $data_siswa['Nilai_Rapor'] <= 85 && $sub_alternatif['Nama'] == "76 - 85"){
                 $data_sub_alternatif_filter[$key] = $sub_alternatif;
-            } else if ($data_siswa['Nilai_Rapor'] >= 86 && $data_siswa['Nilai_Rapor'] <= 100 && $sub_alternatif['Nama'] == "86 – 100") {
+            } else if ($data_siswa['Nilai_Rapor'] >= 86 && $data_siswa['Nilai_Rapor'] <= 100 && $sub_alternatif['Nama'] == "86 - 100") {
                 $data_sub_alternatif_filter[$key] = $sub_alternatif;
             }
 
@@ -198,7 +202,6 @@ class DataSiswaController {
             if($data_siswa['Penghasilan_Ortu'] == $sub_alternatif['Nama']){
                 $data_sub_alternatif_filter[$key] = $sub_alternatif;
             }
-
         }
 
         $matriks = $this->helper->perhitungan_matriks_sub_alternatif($data_sub_alternatif_filter, $data_kriteria);
@@ -216,6 +219,7 @@ class DataSiswaController {
         foreach ($dataAlternatif as $key => $alternatif) {
             if($alternatif['Nilai'] > $a){
                 $alternatif_new = $alternatif;
+                $a = $alternatif['Nilai'];
             }  
         }
         if($alternatif_new){

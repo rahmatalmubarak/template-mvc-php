@@ -8,6 +8,7 @@ use SistemPendukungKeputusan\UINIB\PHP\MVC\Helpers\Helper;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataAlternatif;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataKriteria;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataPenilaian;
+use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataSubAlternatif;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataSubKriteria;
 
 class PenilaianController{
@@ -16,6 +17,7 @@ class PenilaianController{
     private $dataSubKriteria;
     private $helper;
     private $dataKriteria;
+    private $dataSubAlternatif;
 
     public function __construct() {
         $this->dataAlternatif = new DataAlternatif;
@@ -23,6 +25,7 @@ class PenilaianController{
         $this->helper = new Helper;
         $this->dataSubKriteria = new DataSubKriteria;
         $this->dataKriteria = new DataKriteria;
+        $this->dataSubAlternatif = new DataSubAlternatif;
         if ($_SESSION['user']['Level'] != 'admin') {
             $this->helper->ResponseSession([], 'Kamu Tidak diizinkan Mengakses ini', true);
             header('Location: ' . BASE_URL . 'dashboard/profil');
@@ -79,19 +82,31 @@ class PenilaianController{
         $id_alternatif = $_POST['id_alternatif'];
         unset($_POST['id_alternatif']);
         foreach ($_POST as $key => $sub_kriteria_id) {
-            $data_sub_kriteria = $this->dataSubKriteria->getWithParamsAll('Id_Sub_Kriteria', $sub_kriteria_id);
-            foreach ($data_sub_kriteria as $key => $sub_kriteria) {
-                if($sub_kriteria['Id_Sub_Kriteria'] == $sub_kriteria_id){
-                    $sub_kriteria['Id_Alternatif'] = $id_alternatif;
-                    $result = $this->dataPenilaian->add($sub_kriteria);
+            // Fitur Lama
+            // $data_sub_kriteria = $this->dataSubKriteria->getWithParamsAll('Id_Sub_Kriteria', $sub_kriteria_id);
+
+            // foreach ($data_sub_kriteria as $key => $sub_kriteria) {
+            //     if($sub_kriteria['Id_Sub_Kriteria'] == $sub_kriteria_id){
+            //         $sub_kriteria['Id_Alternatif'] = $id_alternatif;
+            //         $result = $this->dataPenilaian->add($sub_kriteria);
+            //     }
+            // }
+
+            // Fitur Baru 
+            $data_sub_alternatif = $this->dataSubAlternatif->getWithParamsAll('Id_Sub_Alternatif', $sub_kriteria_id);
+
+            foreach ($data_sub_alternatif as $key => $sub_alternatif) {
+                if($sub_alternatif['Id_Sub_Alternatif'] == $sub_kriteria_id){
+                    $sub_alternatif['Id_Alternatif'] = $id_alternatif;
+                    $result = $this->dataPenilaian->addWithSubAlternatif($sub_alternatif);
                 }
             }
         }
-
+        // exit();
         if($result){
             $data_kriteria = $this->dataKriteria->count_page();
             $data_alternatif = $this->dataAlternatif->count_page();
-
+            
             $matriks = $this->helper->perhitungan_matriks($data_alternatif, $data_kriteria);
             $this->helper->refresh_hasil_akhir($matriks);
             $this->helper->ResponseSession([],'Data Berhasil Ditambahkan', false);
@@ -107,28 +122,46 @@ class PenilaianController{
         unset($_POST['id_alternatif']);
         $data_penilaian = $this->dataPenilaian->getWithParamsAll('Id_Alternatif', $id_alternatif); 
         foreach ($data_penilaian as $key => $penilaian) {
-            if(!in_array($penilaian['Id_Sub_Kriteria'],$_POST)){
-                $sub_kriteria = $this->dataSubKriteria->getWithParams('Id_Sub_Kriteria', $penilaian['Id_Sub_Kriteria']);
-                $kriteria = $this->dataKriteria->getWithParams('Id_Kriteria', $sub_kriteria['Id_Kriteria']);
+            // if(!in_array($penilaian['Id_Sub_Kriteria'],$_POST)){
+            if(!in_array($penilaian['Id_Sub_Alternatif'],$_POST)){
+                // $sub_kriteria = $this->dataSubKriteria->getWithParams('Id_Sub_Kriteria', $penilaian['Id_Sub_Kriteria']);
+                $kriteria = $this->dataKriteria->getWithParams('Id_Kriteria', $penilaian['Id_Kriteria']);
+                // switch ($kriteria['Nama_Kriteria']) {
+                //     case 'Nilai Rapor':
+                //         $sub_kriteria_new = $this->dataSubKriteria->getWithParams('Id_Sub_Kriteria', $_POST['nilai']);
+                //         break;
+
+                //     case 'Minat dan Bakat':
+                //         $sub_kriteria_new = $this->dataSubKriteria->getWithParams('Id_Sub_Kriteria', $_POST['minat_bakat']);
+                //         break;
+
+                //     case 'Prestasi Akademik':
+                //         $sub_kriteria_new = $this->dataSubKriteria->getWithParams('Id_Sub_Kriteria', $_POST['prestasi_akademik']);
+                //         break;
+                        
+                //     case 'Penghasilan Orang Tua':
+                //         $sub_kriteria_new = $this->dataSubKriteria->getWithParams('Id_Sub_Kriteria', $_POST['penghasilan_orang_tua']);
+                //         break;
+                //     }
                 switch ($kriteria['Nama_Kriteria']) {
                     case 'Nilai Rapor':
-                        $sub_kriteria_new = $this->dataSubKriteria->getWithParams('Id_Sub_Kriteria', $_POST['nilai']);
+                        $sub_kriteria_new = $this->dataSubAlternatif->getWithParams('Id_Sub_Alternatif', $_POST['nilai']);
                         break;
 
                     case 'Minat dan Bakat':
-                        $sub_kriteria_new = $this->dataSubKriteria->getWithParams('Id_Sub_Kriteria', $_POST['minat_bakat']);
+                        $sub_kriteria_new = $this->dataSubAlternatif->getWithParams('Id_Sub_Alternatif', $_POST['minat_bakat']);
                         break;
 
                     case 'Prestasi Akademik':
-                        $sub_kriteria_new = $this->dataSubKriteria->getWithParams('Id_Sub_Kriteria', $_POST['prestasi_akademik']);
+                        $sub_kriteria_new = $this->dataSubAlternatif->getWithParams('Id_Sub_Alternatif', $_POST['prestasi_akademik']);
                         break;
                         
                     case 'Penghasilan Orang Tua':
-                        $sub_kriteria_new = $this->dataSubKriteria->getWithParams('Id_Sub_Kriteria', $_POST['penghasilan_orang_tua']);
+                        $sub_kriteria_new = $this->dataSubAlternatif->getWithParams('Id_Sub_Alternatif', $_POST['penghasilan_orang_tua']);
                         break;
                     }
                 $sub_kriteria_new['Id_Penilaian'] = $penilaian['Id_Penilaian'];
-                $result = $this->dataPenilaian->edit($sub_kriteria_new);
+                $result = $this->dataPenilaian->editWithSubAlternatif($sub_kriteria_new);
                 
             }
         }

@@ -112,7 +112,7 @@ CREATE TABLE `data_user` (
 INSERT INTO `data_user` (`id_data_user`, `Id_User`, `NilaiX_SmtI`, `NilaiX_SmtII`, `NilaiXI_SmtI`, `NilaiXI_SmtII`, `NilaiXII_SmtI`, `NilaiXII_SmtII`, `Nilai_Rapor`, `Minat_Bakat`, `Prestasi_Akademik`, `Penghasilan_Ortu`) VALUES
 (4, 26, 80, 89, 90, 89, 100, 101, 91.5, 'Agama', 'Juara Tingkat Provinsi >3', '1.500.000 s/d 2.400.000'),
 (5, 27, 86, 86, 86, 86, 86, 86, 86, 'Agama', 'Tidak Ada -', '2.000.000 s/d 2.400.000'),
-(6, 28, 100, 100, 90, 100, 100, 100, 98.33, 'Ilmu Sosial', 'Juara Tingkat Provinsi 1 – 3', '5.100.000 s/d 10.000.000');
+(6, 28, 100, 100, 90, 100, 100, 100, 98.33, 'Ilmu Sosial', 'Juara Tingkat Provinsi 1 - 3', '5.100.000 s/d 10.000.000');
 
 -- --------------------------------------------------------
 
@@ -186,28 +186,12 @@ INSERT INTO `kriteria` (`Id_Kriteria`, `Kode_Kriteria`, `Nama_Kriteria`, `Bobot_
 
 CREATE TABLE `penilaian` (
   `Id_Penilaian` int(3) NOT NULL,
-  `Id_Sub_Kriteria` int(3) NOT NULL,
   `Id_Alternatif` int(3) NOT NULL,
+  `Id_Kriteria` int(3) NOT NULL,
+  `Id_Sub_Alternatif` int(3) NOT NULL,
   `Nilai` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `penilaian`
---
-
-INSERT INTO `penilaian` (`Id_Penilaian`, `Id_Sub_Kriteria`, `Id_Alternatif`, `Nilai`) VALUES
-(48, 14, 3, 5),
-(49, 16, 3, 3),
-(50, 10, 3, 9),
-(51, 34, 3, 4),
-(52, 14, 2, 5),
-(53, 15, 2, 3),
-(54, 10, 2, 9),
-(55, 37, 2, 1),
-(56, 2, 4, 1),
-(57, 18, 4, 3),
-(58, 31, 4, 3),
-(59, 12, 4, 5);
 
 -- --------------------------------------------------------
 
@@ -229,13 +213,13 @@ CREATE TABLE `sub_alternatif` (
 --
 
 INSERT INTO `sub_alternatif` (`Id_Sub_Alternatif`, `Id_Alternatif`, `Id_Kriteria`, `Nama`, `Bobot`, `Nilai`) VALUES
-(4, 2, 27, '0 – 50', 'Sangat Rendah', 1),
+(4, 2, 27, '0 - 50', 'Sangat Rendah', 1),
 (7, 2, 28, 'Bahasa', 'Cukup', 5),
 (8, 2, 29, 'Juara Tingkat Nasional', '>3', 9),
-(16, 2, 27, '51– 65', 'Cukup', 2),
-(17, 2, 27, '66 – 75', 'Cukup', 3),
-(18, 2, 27, '76 – 85', 'Tinggi', 4),
-(19, 2, 27, '86 – 100', 'Sangat Tinggi', 5),
+(16, 2, 27, '51- 65', 'Cukup', 2),
+(17, 2, 27, '66 - 75', 'Cukup', 3),
+(18, 2, 27, '76 - 85', 'Tinggi', 4),
+(19, 2, 27, '86 - 100', 'Sangat Tinggi', 5),
 (20, 2, 28, 'Teknologi', 'Cukup', 4),
 (21, 2, 28, 'Hukum', 'Cukup', 4),
 (22, 2, 28, 'Agama', 'Cukup', 3),
@@ -247,19 +231,19 @@ INSERT INTO `sub_alternatif` (`Id_Sub_Alternatif`, `Id_Alternatif`, `Id_Kriteria
 (29, 2, 28, 'Ilmu Kesejahteraan dan Pelayanan Sosial', 'Cukup', 3),
 (30, 2, 28, 'Ilmu Sosial', 'Cukup', 2),
 (31, 2, 28, 'Sains', 'Cukup', 3),
-(32, 2, 29, 'Juara Tingkat Nasional', '1 – 3', 8),
+(32, 2, 29, 'Juara Tingkat Nasional', '1 - 3', 8),
 (34, 2, 29, 'Juara Tingkat Sekolah', '>3', 3),
-(36, 2, 29, 'Juara Tingkat Sekolah', '1 – 3', 2),
+(36, 2, 29, 'Juara Tingkat Sekolah', '1 - 3', 2),
 (41, 2, 29, 'Juara Tingkat Provinsi', '>3', 7),
-(42, 2, 29, 'Juara Tingkat Provinsi', '1 – 3', 6),
+(42, 2, 29, 'Juara Tingkat Provinsi', '1 - 3', 6),
 (43, 2, 29, 'Juara Tingkat Kabupaten/Kota', '>3', 5),
-(44, 2, 29, 'Juara Tingkat Kabupaten/Kota', '1 – 3', 4),
+(44, 2, 29, 'Juara Tingkat Kabupaten/Kota', '1 - 3', 4),
 (45, 2, 29, 'Tidak Ada', '-', 1),
-(46, 3, 27, '0 – 50', 'Cukup', 2),
-(47, 3, 27, '51– 65', 'Cukup', 3),
-(48, 3, 27, '66 – 75', 'Cukup', 4),
-(49, 3, 27, '76 – 85', 'Cukup', 5),
-(50, 3, 27, '86 – 100', 'Cukup', 4),
+(46, 3, 27, '0 - 50', 'Cukup', 2),
+(47, 3, 27, '51- 65', 'Cukup', 3),
+(48, 3, 27, '66 - 75', 'Cukup', 4),
+(49, 3, 27, '76 - 85', 'Cukup', 5),
+(50, 3, 27, '86 - 100', 'Cukup', 4),
 (51, 3, 28, 'Bahasa', 'Cukup', 4),
 (52, 3, 28, 'Teknologi', 'Cukup', 4),
 (53, 3, 28, 'Hukum', 'Cukup', 3),
@@ -273,19 +257,19 @@ INSERT INTO `sub_alternatif` (`Id_Sub_Alternatif`, `Id_Alternatif`, `Id_Kriteria
 (61, 3, 28, 'Ilmu Sosial', 'Cukup', 2),
 (62, 3, 28, 'Sains', 'Cukup', 4),
 (63, 3, 29, 'Juara Tingkat Nasional', '>3', 9),
-(64, 3, 29, 'Juara Tingkat Nasional', '1 – 3', 8),
+(64, 3, 29, 'Juara Tingkat Nasional', '1 - 3', 8),
 (65, 3, 29, 'Juara Tingkat Provinsi', '>3', 7),
-(66, 3, 29, 'Juara Tingkat Provinsi', '1 – 3', 6),
+(66, 3, 29, 'Juara Tingkat Provinsi', '1 - 3', 6),
 (67, 3, 29, 'Juara Tingkat Kabupaten/Kota', '>3', 5),
-(68, 3, 29, 'Juara Tingkat Kabupaten/Kota', '1 – 3', 4),
+(68, 3, 29, 'Juara Tingkat Kabupaten/Kota', '1 - 3', 4),
 (69, 3, 29, 'Juara Tingkat Sekolah', '>3', 3),
-(70, 3, 29, 'Juara Tingkat Sekolah', '1 – 3', 2),
+(70, 3, 29, 'Juara Tingkat Sekolah', '1 - 3', 2),
 (71, 3, 29, 'Tidak Ada', '-', 2),
-(77, 23, 27, '0 – 50', 'Cukup', 2),
-(78, 23, 27, '51– 65', 'Cukup', 4),
-(79, 23, 27, '66 – 75', 'Cukup', 3),
-(80, 23, 27, '76 – 85', 'Cukup', 2),
-(81, 23, 27, '86 – 100', 'Cukup', 5),
+(77, 23, 27, '0 - 50', 'Cukup', 2),
+(78, 23, 27, '51- 65', 'Cukup', 4),
+(79, 23, 27, '66 - 75', 'Cukup', 3),
+(80, 23, 27, '76 - 85', 'Cukup', 2),
+(81, 23, 27, '86 - 100', 'Cukup', 5),
 (82, 23, 28, 'Bahasa', 'Cukup', 3),
 (83, 23, 28, 'Teknologi', 'Cukup', 4),
 (84, 23, 28, 'Hukum', 'Cukup', 2),
@@ -299,15 +283,15 @@ INSERT INTO `sub_alternatif` (`Id_Sub_Alternatif`, `Id_Alternatif`, `Id_Kriteria
 (92, 23, 28, 'Ilmu Sosial', 'Cukup', 3),
 (93, 23, 28, 'Sains', 'Cukup', 4),
 (94, 23, 29, 'Juara Tingkat Nasional', '>3', 4),
-(95, 23, 29, 'Juara Tingkat Nasional', '1 – 3', 3),
+(95, 23, 29, 'Juara Tingkat Nasional', '1 - 3', 3),
 (96, 23, 29, 'Juara Tingkat Provinsi', '>3', 7),
-(97, 23, 29, 'Juara Tingkat Provinsi', '1 – 3', 9),
+(97, 23, 29, 'Juara Tingkat Provinsi', '1 - 3', 9),
 (98, 23, 29, 'Juara Tingkat Kabupaten/Kota', '>3', 7),
-(99, 23, 29, 'Juara Tingkat Kabupaten/Kota', '1 – 3', 7),
+(99, 23, 29, 'Juara Tingkat Kabupaten/Kota', '1 - 3', 7),
 (100, 23, 29, 'Juara Tingkat Sekolah', '>3', 5),
-(101, 23, 29, 'Juara Tingkat Sekolah', '1 – 3', 3),
+(101, 23, 29, 'Juara Tingkat Sekolah', '1 - 3', 3),
 (102, 23, 29, 'Tidak Ada', '-', 3),
-(108, 4, 27, '86 – 100', 'Cukup', 5),
+(108, 4, 27, '86 - 100', 'Cukup', 5),
 (109, 4, 28, 'Agama', 'Cukup', 2),
 (110, 4, 29, 'Tidak Ada', '-', 5),
 (112, 2, 31, '2.000.000 s/d 2.400.000', 'Cukup', 3),
@@ -352,13 +336,13 @@ INSERT INTO `sub_kriteria` (`Id_Sub_Kriteria`, `Id_Kriteria`, `Nama`, `Bobot`, `
 (23, 28, 'Ekonomi', 'Cukup', 3),
 (24, 28, 'Bisnis dan Menajemen', 'Cukup', 3),
 (25, 28, 'Matematika', 'Cukup', 3),
-(26, 29, 'Juara Tingkat Nasional', '1 – 3', 8),
+(26, 29, 'Juara Tingkat Nasional', '1 - 3', 8),
 (27, 29, 'Juara Tingkat Provinsi', '>3', 7),
-(28, 29, 'Juara Tingkat Provinsi', '1 – 3', 6),
+(28, 29, 'Juara Tingkat Provinsi', '1 - 3', 6),
 (29, 29, 'Juara Tingkat Kabupaten/Kota', '>3', 5),
-(30, 29, 'Juara Tingkat Kabupaten/Kota', '1 – 3', 4),
+(30, 29, 'Juara Tingkat Kabupaten/Kota', '1 - 3', 4),
 (31, 29, 'Juara Tingkat Sekolah', '>3', 3),
-(32, 29, 'Juara Tingkat Sekolah', '1 – 3', 2),
+(32, 29, 'Juara Tingkat Sekolah', '1 - 3', 2),
 (33, 29, 'Tidak Ada', '-', 1),
 (34, 31, '1.500.000 s/d 1.900.000', 'Rendah', 4),
 (35, 31, '2.000.000 s/d 2.400.000', 'Cukup', 3),
@@ -435,7 +419,8 @@ ALTER TABLE `kriteria`
 --
 ALTER TABLE `penilaian`
   ADD PRIMARY KEY (`Id_Penilaian`),
-  ADD KEY `penilaian_ibfk_2` (`Id_Sub_Kriteria`),
+  ADD KEY `penilaian_ibfk_2` (`Id_Sub_Alternatif`),
+  ADD KEY `penilaian_ibfk_4` (`Id_Kriteria`),
   ADD KEY `penilaian_ibfk_3` (`Id_Alternatif`);
 
 --
@@ -545,8 +530,9 @@ ALTER TABLE `klasifikasi_minat_bakat`
 -- Constraints for table `penilaian`
 --
 ALTER TABLE `penilaian`
-  ADD CONSTRAINT `penilaian_ibfk_2` FOREIGN KEY (`Id_Sub_Kriteria`) REFERENCES `sub_kriteria` (`Id_Sub_Kriteria`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `penilaian_ibfk_2` FOREIGN KEY (`Id_Sub_Alternatif`) REFERENCES `sub_alternatif` (`Id_Sub_Alternatif`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `penilaian_ibfk_3` FOREIGN KEY (`Id_Alternatif`) REFERENCES `alternatif` (`Id_Alternatif`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `penilaian_ibfk_4` FOREIGN KEY (`Id_Kriteria`) REFERENCES `kriteria` (`Id_Kriteria`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `sub_alternatif`

@@ -5,16 +5,19 @@ namespace SistemPendukungKeputusan\UINIB\PHP\MVC\Controller;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\App\View;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Helpers\Helper;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataAlternatif;
+use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataKriteria;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataPerhitungan;
 
 class HasilAkhirController{
     private $dataPerhitungan;
     private $dataAlternatif;
     private $helper;
+    private $dataKriteria;
 
     public function __construct() {
         $this->dataPerhitungan = new DataPerhitungan;
         $this->dataAlternatif = new DataAlternatif;
+        $this->dataKriteria = new DataKriteria;
         $this->helper = new Helper;
         if ($_SESSION['user']['Level'] != 'admin') {
             $this->helper->ResponseSession([], 'Kamu Tidak diizinkan Mengakses ini', true);
@@ -25,6 +28,12 @@ class HasilAkhirController{
 
     public function index(){
         $data['title'] = 'Daftar Hasil Akhir';
+        $data_kriteria = $this->dataKriteria->count_page();
+        $data_alternatif = $this->dataAlternatif->count_page();
+
+        $matriks = $this->helper->perhitungan_matriks($data_alternatif, $data_kriteria);
+        $this->helper->refresh_hasil_akhir($matriks);
+
         $data_perhitungan = $this->dataPerhitungan->rangking();
         $rangking = 1;
         foreach ($data_perhitungan as $key => $perhitungan) {

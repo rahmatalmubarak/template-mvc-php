@@ -60,8 +60,9 @@ class Helper{
             $data_penilaian = $this->dataPenilaian->getWithParamsAll('Id_Alternatif', $alternatif['Id_Alternatif']);
             if ($data_penilaian) {
                 foreach ($data_penilaian as $key_penilaian => $penilaian) {
-                    $sub_kriteria = $this->dataSubKriteria->getWithParams('Id_Sub_Kriteria', $penilaian['Id_Sub_Kriteria']);
-                    $kriteria = $this->dataKriteria->getWithParams('Id_Kriteria', $sub_kriteria['Id_Kriteria']);
+                    // $sub_kriteria = $this->dataSubKriteria->getWithParams('Id_Sub_Kriteria', $penilaian['Id_Sub_Kriteria']);
+                    // $kriteria = $this->dataKriteria->getWithParams('Id_Kriteria', $sub_kriteria['Id_Kriteria']);
+                    $kriteria = $this->dataKriteria->getWithParams('Id_Kriteria', $penilaian['Id_Kriteria']);
                     foreach ($data_kriterias as $key => $data_kriteria) {
                         if ($data_kriteria['Kode_Kriteria'] == $kriteria['Kode_Kriteria']) {
                             array_push($nilai[$data_kriteria['Kode_Kriteria']], $penilaian['Nilai']);
@@ -102,8 +103,9 @@ class Helper{
                 $matriks[$key_alternatif] = $alternatif;
                 $nilai_akhir = 0;
                 foreach ($data_penilaian as $key_penilaian => $penilaian) {
-                    $sub_kriteria = $this->dataSubKriteria->getWithParams('Id_Sub_Kriteria', $penilaian['Id_Sub_Kriteria']);
-                    $kriteria = $this->dataKriteria->getWithParams('Id_Kriteria', $sub_kriteria['Id_Kriteria']);
+                    // $sub_kriteria = $this->dataSubKriteria->getWithParams('Id_Sub_Kriteria', $penilaian['Id_Sub_Kriteria']);
+                    // $kriteria = $this->dataKriteria->getWithParams('Id_Kriteria', $sub_kriteria['Id_Kriteria']);
+                    $kriteria = $this->dataKriteria->getWithParams('Id_Kriteria', $penilaian['Id_Kriteria']);
 
                     if ($kriteria['Jenis_Kriteria'] == 'Benefit') {
                         $nilai_ternormalisasi = $penilaian['Nilai'] / max($max_min_nilai[$kriteria['Kode_Kriteria']]);
@@ -134,10 +136,8 @@ class Helper{
     public function perhitungan_matriks_sub_alternatif($data_sub_alternatif, $data_kriteria)
     {
         $max_min_nilai = $this->max_min_nilai_sub_alternatif($data_sub_alternatif, $data_kriteria);
-        // var_dump($max_min_nilai);exit();
         $matriks = [];
         foreach ($data_sub_alternatif as $key_alternatif => $alternatif) {
-                // var_dump($alternatif);exit();
                 $matriks[$key_alternatif] = $alternatif;
                 $nilai_akhir = 0;
                 $kriteria = $this->dataKriteria->getWithParams('Id_Kriteria', $alternatif['Id_Kriteria']);
