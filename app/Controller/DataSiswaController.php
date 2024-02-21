@@ -165,15 +165,15 @@ class DataSiswaController {
         $data_perhitungan = $this->dataPerhitungan->rangking();
 
         $rekomendasi_prodi = [];
-        foreach ($data_perhitungan as $key => $perhitungan) {
-            if ($perhitungan['Nilai'] <= $nilai_akhir) {
-                // Rekomendasi prodi berdasarkan perhitungan
-                array_push($rekomendasi_prodi, $perhitungan); 
-                if (count($rekomendasi_prodi) == 2) {
-                    break;
-                }
-            }
-        }
+        // foreach ($data_perhitungan as $key => $perhitungan) {
+        //     if ($perhitungan['Nilai'] <= $nilai_akhir) {
+        //         // Rekomendasi prodi berdasarkan perhitungan
+        //         array_push($rekomendasi_prodi, $perhitungan); 
+        //         if (count($rekomendasi_prodi) == 2) {
+        //             break;
+        //         }
+        //     }
+        // }
 
         $data_kriteria = $this->dataKriteria->count_page();
         $data_sub_alternatif = $this->dataSubAlternatif->count_page();
@@ -224,15 +224,67 @@ class DataSiswaController {
             }  
         }
         if($alternatif_new){
-            array_push($rekomendasi_prodi, $alternatif_new);
+            array_push($data_perhitungan, $alternatif_new);
         }
 
-        usort($rekomendasi_prodi, function ($a, $b) {
-            $retval = $a['Nilai'] <=> $b['Nilai'];
-            if ($retval == -1) {
-                return $a;
+        for ($i = 0; $i < 10; $i++) {
+            usort($data_perhitungan, function ($a, $b) {
+                $retval = $a['Nilai'] <=> $b['Nilai'];
+                if ($retval == -1) {
+                    return $a;
+                }
+            });
+        }
+        // var_dump($data_perhitungan);exit();
+        foreach ($data_perhitungan as $key => $perhitungan) {
+            if ($perhitungan['Nilai'] <= $nilai_akhir) {
+                // Rekomendasi prodi berdasarkan perhitungan
+                array_push($rekomendasi_prodi, $perhitungan);
+                if (count($rekomendasi_prodi) == 3) {
+                    break;
+                }
             }
-        });
+           
+        };
+        if (count($rekomendasi_prodi) < 3) {
+            $no = 1;
+            foreach ($data_perhitungan as $key => $perhitungan) {
+                if (count($rekomendasi_prodi) < 3) {
+                    if ($perhitungan['Nilai'] <= $nilai_akhir) {
+                        array_push($rekomendasi_prodi,$data_perhitungan[$key-$no]);
+                        $no++;
+                        if (count($rekomendasi_prodi) == 3) {
+                            break;
+                        }
+                    }
+                }
+            }   
+        }
+
+        if (count($rekomendasi_prodi) < 3) {
+            $no = 1;
+            unset($data_perhitungan[count($data_perhitungan)-1]);
+            foreach ($data_perhitungan as $key => $perhitungan) {
+                if (count($rekomendasi_prodi) < 3) {
+                    if ($perhitungan['Nilai'] >= $nilai_akhir) {
+                        array_push($rekomendasi_prodi, $data_perhitungan[count($data_perhitungan)-$no]);
+                        $no++;
+                        if (count($rekomendasi_prodi) == 3) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        for ($i=0; $i < 2; $i++) {
+            usort($rekomendasi_prodi, function ($a, $b) {
+                $retval = $a['Nilai'] <=> $b['Nilai'];
+                if ($retval == -1) {
+                    return $a;
+                }
+            });
+        }
         
         $result = [
             'dataSiswa' => $data_user,

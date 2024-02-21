@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 20, 2024 at 04:40 PM
+-- Generation Time: Feb 21, 2024 at 08:00 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -100,7 +100,7 @@ CREATE TABLE `data_user` (
 INSERT INTO `data_user` (`id_data_user`, `Id_User`, `NilaiX_SmtI`, `NilaiX_SmtII`, `NilaiXI_SmtI`, `NilaiXI_SmtII`, `NilaiXII_SmtI`, `NilaiXII_SmtII`, `Nilai_Rapor`, `Minat_Bakat`, `Prestasi_Akademik`, `Penghasilan_Ortu`) VALUES
 (4, 26, 80, 89, 90, 89, 100, 101, 91.5, 'Agama', 'Juara Tingkat Provinsi >3', '1.500.000 s/d 2.400.000'),
 (5, 27, 86, 86, 86, 86, 86, 86, 86, 'Sains', 'Tidak Ada -', '2.000.000 s/d 2.400.000'),
-(6, 28, 100, 100, 90, 100, 100, 100, 98.33, 'Ilmu Sosial', 'Juara Tingkat Provinsi 1 - 3', '5.100.000 s/d 10.000.000');
+(7, 29, 80, 80, 80, 80, 80, 80, 80, 'Bahasa', 'Juara Tingkat Nasional 1 - 3', '1.500.000 s/d 1.900.000');
 
 -- --------------------------------------------------------
 
@@ -153,18 +153,6 @@ INSERT INTO `hasil_perhitungan_saw` (`Id_Hasil_SAW`, `Id_Alternatif`, `Nilai`) V
 (37, 32, 77.55),
 (38, 33, 78.25),
 (39, 34, 80.25);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `klasifikasi_minat_bakat`
---
-
-CREATE TABLE `klasifikasi_minat_bakat` (
-  `Id_Klasifikasi_Minat_Bakat` int(11) NOT NULL,
-  `Id_Alternatif` int(11) NOT NULL,
-  `Id_Sub_Kriteria` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1496,7 +1484,6 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`Id_User`, `Foto`, `NISN`, `Nama_Lengkap`, `Asal_Sekolah`, `Username`, `Password`, `Level`) VALUES
 (26, NULL, 1111, 'admin', 'asd', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin'),
 (27, 'user-728875.png', 987654321, 'Sri Mulliyanti', 'Padang', 'sri', 'd1565ebd8247bbb01472f80e24ad29b6', 'siswa'),
-(28, NULL, 1231231312, 'asep', 'ui', 'asep', 'd1565ebd8247bbb01472f80e24ad29b6', 'siswa'),
 (29, NULL, 1212, 'sadA', 'dsf', 'qwe', '76d80224611fc919a5d54f0ff9fba446', 'siswa');
 
 --
@@ -1524,14 +1511,6 @@ ALTER TABLE `hasil_perhitungan_saw`
   ADD KEY `hasil_perhitungan_saw_ibfk_1` (`Id_Alternatif`);
 
 --
--- Indexes for table `klasifikasi_minat_bakat`
---
-ALTER TABLE `klasifikasi_minat_bakat`
-  ADD PRIMARY KEY (`Id_Klasifikasi_Minat_Bakat`),
-  ADD KEY `Id_Alternatif` (`Id_Alternatif`),
-  ADD KEY `klasifikasi_minat_bakat_ibfk_2` (`Id_Sub_Kriteria`);
-
---
 -- Indexes for table `kriteria`
 --
 ALTER TABLE `kriteria`
@@ -1543,8 +1522,8 @@ ALTER TABLE `kriteria`
 ALTER TABLE `penilaian`
   ADD PRIMARY KEY (`Id_Penilaian`),
   ADD KEY `penilaian_ibfk_2` (`Id_Sub_Alternatif`),
-  ADD KEY `penilaian_ibfk_4` (`Id_Kriteria`),
-  ADD KEY `penilaian_ibfk_3` (`Id_Alternatif`);
+  ADD KEY `penilaian_ibfk_3` (`Id_Alternatif`),
+  ADD KEY `penilaian_ibfk_4` (`Id_Kriteria`);
 
 --
 -- Indexes for table `sub_alternatif`
@@ -1582,19 +1561,13 @@ ALTER TABLE `alternatif`
 -- AUTO_INCREMENT for table `data_user`
 --
 ALTER TABLE `data_user`
-  MODIFY `id_data_user` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_data_user` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `hasil_perhitungan_saw`
 --
 ALTER TABLE `hasil_perhitungan_saw`
   MODIFY `Id_Hasil_SAW` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
-
---
--- AUTO_INCREMENT for table `klasifikasi_minat_bakat`
---
-ALTER TABLE `klasifikasi_minat_bakat`
-  MODIFY `Id_Klasifikasi_Minat_Bakat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `kriteria`
@@ -1634,20 +1607,13 @@ ALTER TABLE `user`
 -- Constraints for table `data_user`
 --
 ALTER TABLE `data_user`
-  ADD CONSTRAINT `data_user_ibfk_1` FOREIGN KEY (`Id_User`) REFERENCES `user` (`Id_User`);
+  ADD CONSTRAINT `data_user_ibfk_1` FOREIGN KEY (`Id_User`) REFERENCES `user` (`Id_User`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `hasil_perhitungan_saw`
 --
 ALTER TABLE `hasil_perhitungan_saw`
   ADD CONSTRAINT `hasil_perhitungan_saw_ibfk_1` FOREIGN KEY (`Id_Alternatif`) REFERENCES `alternatif` (`Id_Alternatif`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `klasifikasi_minat_bakat`
---
-ALTER TABLE `klasifikasi_minat_bakat`
-  ADD CONSTRAINT `klasifikasi_minat_bakat_ibfk_1` FOREIGN KEY (`Id_Alternatif`) REFERENCES `alternatif` (`Id_Alternatif`) ON DELETE CASCADE,
-  ADD CONSTRAINT `klasifikasi_minat_bakat_ibfk_2` FOREIGN KEY (`Id_Sub_Kriteria`) REFERENCES `sub_kriteria` (`Id_Sub_Kriteria`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `penilaian`
