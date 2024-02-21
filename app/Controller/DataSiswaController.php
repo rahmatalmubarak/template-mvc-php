@@ -96,6 +96,7 @@ class DataSiswaController {
             $result = [
                 'userData' => $userData,
                 'dataSiswaData' => [],
+                'dataKriteria' => $sub_kriteria_split,
                 'dataPrestasiAkademik' => $sub_kriteria_split['data_prestasi_akademik']
             ];
             $response = $this->helper->ResponseData($result, "Data Gagal Ditampilkan", true);
@@ -168,7 +169,7 @@ class DataSiswaController {
             if ($perhitungan['Nilai'] <= $nilai_akhir) {
                 // Rekomendasi prodi berdasarkan perhitungan
                 array_push($rekomendasi_prodi, $perhitungan); 
-                if (count($rekomendasi_prodi) == 3) {
+                if (count($rekomendasi_prodi) == 2) {
                     break;
                 }
             }
@@ -225,6 +226,14 @@ class DataSiswaController {
         if($alternatif_new){
             array_push($rekomendasi_prodi, $alternatif_new);
         }
+
+        usort($rekomendasi_prodi, function ($a, $b) {
+            $retval = $a['Nilai'] <=> $b['Nilai'];
+            if ($retval == -1) {
+                return $a;
+            }
+        });
+        
         $result = [
             'dataSiswa' => $data_user,
             'rekomendasiProdi' => $rekomendasi_prodi,
