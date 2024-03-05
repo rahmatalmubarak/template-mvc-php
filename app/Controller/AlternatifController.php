@@ -5,7 +5,6 @@ namespace SistemPendukungKeputusan\UINIB\PHP\MVC\Controller;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\App\View;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Helpers\Helper;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataAlternatif;
-use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataKlasifikasiMinatBakat;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataKriteria;
 use SistemPendukungKeputusan\UINIB\PHP\MVC\Models\DataSubKriteria;
 
@@ -13,7 +12,6 @@ class AlternatifController{
     private $dataAlternatif;
     private $dataSubKriteria;
     private $dataKriteria;
-    private $dataKlasifikasiMinatBakat;
     private $kriteria_minat_bakat;
     private $helper;
 
@@ -21,7 +19,6 @@ class AlternatifController{
         $this->dataAlternatif = new DataAlternatif;
         $this->dataSubKriteria = new DataSubKriteria;
         $this->dataKriteria = new DataKriteria;
-        $this->dataKlasifikasiMinatBakat = new DataKlasifikasiMinatBakat;
         $this->helper = new Helper;
         $this->kriteria_minat_bakat = $this->dataKriteria->getWithParams('Nama_Kriteria', 'Minat dan Bakat');
         if($_SESSION['user']['Level'] != 'admin'){
@@ -87,8 +84,6 @@ class AlternatifController{
         $data['alternatif'] = $this->dataAlternatif->getWithParams('Id_Alternatif', $id_alternatif);
 
         $data['minat_bakat'] = $this->dataSubKriteria->getWithParamsAll('Id_Kriteria', $this->kriteria_minat_bakat['Id_Kriteria']);
-        
-        $data['klasifikasi_minat_bakat'] = $this->dataKlasifikasiMinatBakat->getWithParams('Id_Alternatif', $id_alternatif);
 
         if($data){
             $response = $this->helper->ResponseData($data, 'Data Berhasil Ditampilkan', false);
