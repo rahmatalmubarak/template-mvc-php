@@ -113,9 +113,9 @@ class DataSiswaController {
         if(!$chek_data_siswa){
             $result = $this->dataSiswa->add($_POST);
             if($result){
-               $this->helper->ResponseSession($result, "Data Berhasil Ditambahkan", false);
+            //    $this->helper->ResponseSession($result, "Data Berhasil Ditambahkan", false);
             }else{
-               $this->helper->ResponseSession($result, "Data Gagal Ditambahkan", false);
+            //    $this->helper->ResponseSession($result, "Data Gagal Ditambahkan", false);
             }
             header('Location: ' . BASE_URL . 'dashboard/profil/data-siswa');
             exit();
