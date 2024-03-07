@@ -182,31 +182,12 @@ class Helper{
 
     public function sub_kriteria_split($data_sub_kriteria)
     {
-        $data_nilai_rapor = [];
-        $data_minat_bakat = [];
-        $data_prestasi_akademik = [];
-        $data_penghasilan_orang_tua = [];
         foreach ($data_sub_kriteria as $key => $sub_kriteria) {
             $data_kriteria_ = $this->dataKriteria->getWithParams('Id_Kriteria', $sub_kriteria['Id_Kriteria']);
-            if ($data_kriteria_['Nama_Kriteria'] == 'Nilai Rapor') {
-                array_push($data_nilai_rapor, $sub_kriteria);
-            }
-            if ($data_kriteria_['Nama_Kriteria'] == 'Minat dan Bakat') {
-                array_push($data_minat_bakat, $sub_kriteria);
-            }
-            if ($data_kriteria_['Nama_Kriteria'] == 'Prestasi Akademik') {
-                array_push($data_prestasi_akademik, $sub_kriteria);
-            }
-            if ($data_kriteria_['Nama_Kriteria'] == 'Penghasilan Orang Tua') {
-                array_push($data_penghasilan_orang_tua, $sub_kriteria);
-            }
+            $data_kriteria['data_'. str_replace(' ','_',  strtolower($data_kriteria_['Nama_Kriteria']))][] = $sub_kriteria;
         }
-        return [
-            'data_nilai_rapor' => $data_nilai_rapor,
-            'data_minat_bakat' => $data_minat_bakat,
-            'data_prestasi_akademik' => $data_prestasi_akademik,
-            'data_penghasilan_orang_tua' => $data_penghasilan_orang_tua,
-        ];
+
+        return $data_kriteria;
     }
     public function sub_alternatif_split($data_sub_alternatif)
     {

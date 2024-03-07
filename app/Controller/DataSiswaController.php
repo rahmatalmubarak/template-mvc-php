@@ -148,7 +148,7 @@ class DataSiswaController {
             if ($sub_kriteria['Nama'] == $data_siswa['Penghasilan_Ortu']) {
                 $data_user['Nilai']['Penghasilan_Orang_Tua'] = $sub_kriteria['Nilai'];
             }
-            if ($sub_kriteria['Nama'] . " " . $sub_kriteria['Bobot'] == $data_siswa['Prestasi_Akademik']) {
+            if ($sub_kriteria['Nama'] == $data_siswa['Prestasi_Akademik']) {
                 $data_user['Nilai']['Prestasi_Akademik'] = $sub_kriteria['Nilai'];
             }
         }
@@ -196,7 +196,7 @@ class DataSiswaController {
                 $data_sub_alternatif_filter[$key] = $sub_alternatif;
             }
 
-            if($data_siswa['Prestasi_Akademik'] == $sub_alternatif['Nama']. ' ' . $sub_alternatif['Bobot']){
+            if($data_siswa['Prestasi_Akademik'] == $sub_alternatif['Nama']){
                 $data_sub_alternatif_filter[$key] = $sub_alternatif;
             }
 

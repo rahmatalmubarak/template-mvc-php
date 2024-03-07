@@ -41,17 +41,6 @@
                                             <label for="nama">Alternatif</label>
                                             <input type="text" name="nama" class="form-control" id="nama" placeholder="Alternatif" value="<?= $response['data']['alternatif']['Nama']; ?>" required>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="minat_bakat">Klasifikasi Minat dan Bakat</label>
-                                            <select class="form-control" name="minat_bakat" id="minat_bakat" required>
-                                                <option value="">Pilih</option>
-                                                <?php
-                                                foreach ($response['data']['minat_bakat'] as $key => $minat_bakat) :
-                                                ?>
-                                                    <option value="<?= $minat_bakat['Id_Sub_Kriteria'] ?>" <?= isset($response['data']['klasifikasi_minat_bakat']['Id_Sub_Kriteria']) && $response['data']['klasifikasi_minat_bakat']['Id_Sub_Kriteria'] ==  $minat_bakat['Id_Sub_Kriteria'] ? 'selected' : $minat_bakat['Id_Sub_Kriteria'] ?>><?= $minat_bakat['Nama'] ?></option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -83,8 +83,6 @@ class AlternatifController{
         $id_alternatif = $_GET['id'];
         $data['alternatif'] = $this->dataAlternatif->getWithParams('Id_Alternatif', $id_alternatif);
 
-        $data['minat_bakat'] = $this->dataSubKriteria->getWithParamsAll('Id_Kriteria', $this->kriteria_minat_bakat['Id_Kriteria']);
-
         if($data){
             $response = $this->helper->ResponseData($data, 'Data Berhasil Ditampilkan', false);
         }else{

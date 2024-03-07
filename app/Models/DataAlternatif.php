@@ -11,7 +11,6 @@ class DataAlternatif{
     public function __construct()
     {
         $this->db = new Database;
-        $this->dataKlasifikasiMinatBakat = new DataKlasifikasiMinatBakat;
     }
     public function count_page()
     {
@@ -49,7 +48,6 @@ class DataAlternatif{
         $this->db->rowCount();
 
         $alternatif = $this->getWithParams('Nama', $data['nama']);
-        $this->dataKlasifikasiMinatBakat->add($data, $alternatif['Id_Alternatif']);
         return true;
     }
 
@@ -59,13 +57,6 @@ class DataAlternatif{
         $this->db->bind('id_alternatif', $data['id_alternatif']);
         $this->db->bind('nama', $data['nama']);
         $this->db->execute();
-
-        $isKlasifikasi_minat_bakat = $this->dataKlasifikasiMinatBakat->getWithParams('Id_Alternatif', $data['id_alternatif']);
-        if($isKlasifikasi_minat_bakat){
-            $this->dataKlasifikasiMinatBakat->edit($data);
-        }else{
-            $this->dataKlasifikasiMinatBakat->add($data, $data['id_alternatif']);
-        }
         return true;
     }
 

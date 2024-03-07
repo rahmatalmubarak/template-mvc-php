@@ -30,25 +30,16 @@ class SubKriteriaController{
         $data_sub_kriteria = $this->dataSubKriteria->all();
 
         $sub_kriteria_split =$this->helper->sub_kriteria_split($data_sub_kriteria);
-        
         if($data_sub_kriteria){
             $result = [
                 'dataKriteria' => $data_kriteria,
-                'dataSubKriteria' => $data_sub_kriteria,
-                'dataNilaiRapor' => $sub_kriteria_split['data_nilai_rapor'],
-                'dataMinatBakat' => $sub_kriteria_split['data_minat_bakat'],
-                'dataPrestasiAkademik' => $sub_kriteria_split['data_prestasi_akademik'],
-                'dataPenghasilanOrangTua' => $sub_kriteria_split['data_penghasilan_orang_tua']
+                'dataSubKriteria' => $sub_kriteria_split,
             ];
             $response = $this->helper->ResponseData($result, "Data Berhasil Ditampilkan",false);
         }else{
             $result = [
                 'dataKriteria' => $data_kriteria,
-                'dataSubKriteria' => $data_sub_kriteria,
-                'dataNilaiRapor' => $sub_kriteria_split['data_nilai_rapor'],
-                'dataMinatBakat' => $sub_kriteria_split['data_minat_bakat'],
-                'dataPrestasiAkademik' => $sub_kriteria_split['data_prestasi_akademik'],
-                'dataPenghasilanOrangTua' => $sub_kriteria_split['data_penghasilan_orang_tua']
+                'dataSubKriteria' => $sub_kriteria_split,
             ];
             $response = $this->helper->ResponseData($result, "Data Berhasil Gagal",true);
         }

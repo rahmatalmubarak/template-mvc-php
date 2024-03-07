@@ -19,7 +19,7 @@ class DataSubKriteria{
     }
 
     public function all(){
-        $query = "SELECT * FROM sub_kriteria";
+        $query = "SELECT * FROM sub_kriteria ORDER BY Id_Kriteria ASC";
         $this->db->query($query);
         return $this->db->resultSet();
     }
