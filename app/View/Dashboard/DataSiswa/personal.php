@@ -65,7 +65,7 @@
                       <select class="form-control" name="minat_bakat" id="minat_bakat" required>
                         <option value="">Pilih</option>
                         <?php 
-                            foreach ($response['data']['dataKriteria']['data_minat_bakat'] as $key => $data_minat_bakat) :
+                            foreach ($response['data']['dataKriteria']['data_minat_dan_bakat'] as $key => $data_minat_bakat) :
                             ?>
                             <option value="<?= $data_minat_bakat['Nama']?>" <?php if(isset($response['data']['dataSiswaData']['Minat_Bakat']) && $data_minat_bakat['Nama'] == $response['data']['dataSiswaData']['Minat_Bakat']) echo 'selected' ?>><?= $data_minat_bakat['Nama']?></option>
                         <?php endforeach;?>
@@ -76,7 +76,7 @@
                       <select class="form-control" name="prestasi_akademik" id="prestasi_akademik" required>
                         <option value="">Pilih</option>
                         <?php foreach ($response['data']['dataPrestasiAkademik'] as $key => $prestasiAkademik) : ?>
-                          <option value="<?= $prestasiAkademik['Nama'] . ' ' . $prestasiAkademik['Bobot'] ?>" <?= isset($response['data']['dataSiswaData']['Prestasi_Akademik']) && $prestasiAkademik['Nama'] . ' ' . $prestasiAkademik['Bobot'] == $response['data']['dataSiswaData']['Prestasi_Akademik'] ? 'selected' : NULL; ?>><?= $prestasiAkademik['Nama'] . ' ' . $prestasiAkademik['Bobot']; ?></option>
+                          <option value="<?= $prestasiAkademik['Nama'] ?>" <?= isset($response['data']['dataSiswaData']['Prestasi_Akademik']) && $prestasiAkademik['Nama'] == $response['data']['dataSiswaData']['Prestasi_Akademik'] ? 'selected' : NULL; ?>><?= $prestasiAkademik['Nama'] ?></option>
                         <?php endforeach; ?>
                       </select>
                     </div>
