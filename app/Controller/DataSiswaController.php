@@ -113,12 +113,13 @@ class DataSiswaController {
         if(!$chek_data_siswa){
             $result = $this->dataSiswa->add($_POST);
             if($result){
-            //    $this->helper->ResponseSession($result, "Data Berhasil Ditambahkan", false);
+                //    $this->helper->ResponseSession($result, "Data Berhasil Ditambahkan", false);
+                $this->helper->ResponseSession($result, "Hasil Nilai Akhir", false);
+                header('Location: ' . BASE_URL . 'dashboard/profil/data-siswa/hasil?id=' . $_SESSION['user']['Id_User']);
+                exit();    
             }else{
-            //    $this->helper->ResponseSession($result, "Data Gagal Ditambahkan", false);
+               $this->helper->ResponseSession($result, "Data Gagal Ditambahkan", false);
             }
-            header('Location: ' . BASE_URL . 'dashboard/profil/data-siswa');
-            exit();
         }
         
         $result = $this->dataSiswa->edit($_POST, $_SESSION['user']['Id_User']);
