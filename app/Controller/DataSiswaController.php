@@ -124,7 +124,7 @@ class DataSiswaController {
         
         $result = $this->dataSiswa->edit($_POST, $_SESSION['user']['Id_User']);
 
-        $this->helper->ResponseSession($result, "Hasil Nilai Akhir", false);
+        // $this->helper->ResponseSession($result, "Hasil Nilai Akhir", false);
         header('Location: ' . BASE_URL . 'dashboard/profil/data-siswa/hasil?id='. $_SESSION['user']['Id_User']);
         exit();
     }
